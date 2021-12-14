@@ -1,0 +1,71 @@
+﻿<partial name="_Style" />
+
+@if (CurrentForm.CurrentFormPermissionActions.AddHasPermission|| CurrentForm.CurrentFormPermissionActions.EditHasPermission)
+{
+
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4>@CurrentForm.Title  </h4>
+            </div>
+        </div>
+        <div class="col-sm-6 p-md-0 ">
+            <button class="btn btn-primary pull-left" id="btnSave" type="button" onclick="SaveUserPermission()">حفظ</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row" style=" align-items: end;">
+                        <div class="col-lg-3 col-md-3">
+                            <label>نوع المستخدم </label>
+                            <select style="width:15%" onchange="ShowUserPermission()" name="UserTypeId" id="ddlUserType" asp-items="ViewBag.UserTypeId" class="form-control select2">
+                                <option value="@Guid.Empty">اختر</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style=" align-items: end;">
+
+                        <div class="col-lg-3 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الصفحة</th>
+                                        <th>اضافة</th>
+                                        <th>عرض</th>
+                                        <th>تعديل</th>
+                                        <th>حذف</th>
+                                        <th>اعتماد</th>
+                                        <th>رفض</th>
+                                        <th>اعتماد نهائي</th>
+                                        <th>اسناد المناطق</th>
+
+                                        <th>تحديد / الغاء الكل</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyUserPermissions"></tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+
+        <partial name="_PermissionsScripts" />
+    }
+}

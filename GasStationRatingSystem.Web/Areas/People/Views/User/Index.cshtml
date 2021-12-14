@@ -1,0 +1,90 @@
+﻿@{
+    Layout = "_Layout";
+}
+@model UserDTO;
+
+<partial name="_Style" />
+<form id="frm" onsubmit="Submit()">
+
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4>@CurrentForm.Title  </h4>
+            </div>
+        </div>
+        @if (CurrentForm.CurrentFormPermissionActions.AddHasPermission || CurrentForm.CurrentFormPermissionActions.EditHasPermission)
+        {
+
+
+        <div class="col-sm-6 p-md-0 ">
+            <button class="btn btn-primary pull-left" id="btnSave" type="submit">حفظ</button>
+        </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row" style=" align-items: end;">
+                        <input type="hidden" id="txtId" asp-for="ID" value="" />
+
+                        <div class="col-lg-3 col-md-3">
+                            <label>اسم المستخدم</label>
+                            <input id="txtUserName" asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName"></span>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3">
+                            <label>اسم المفتش</label>
+                            <input id="txtInspectorName" asp-for="InspectorName" class="form-control" />
+                            <span asp-validation-for="InspectorName"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <label>البريد الالكتروني</label>
+                            <input id="txtEmail" asp-for="Email" class="form-control" />
+                            <span asp-validation-for="UserName"></span>
+
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <label>نوع المستخدم </label>
+                            <select asp-for="UserTypeId" asp-items="ViewBag.UserTypeId" class="form-control select2"></select>
+                            <span asp-validation-for="UserTypeId"></span>
+                        </div>
+                        @if (CurrentForm.CurrentFormPermissionActions.RegionsToUserHasPermission)
+                        {
+                            <div class="col-lg-3 col-md-3">
+                                <label>المناطق </label>
+                                <select asp-for="RegionIds" asp-items="ViewBag.RegionIds" multiple="" class="form-control select2"></select>
+                                <span asp-validation-for="RegionIds"></span>
+                            </div>
+                        }
+
+                        <div class="col-lg-3 col-md-6">
+                            <label>حالة المستخدم </label>
+                            <label class="switch">
+                                <input id="chkIsActive" asp-for="IsActive" type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</form>
+@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+{
+
+
+<partial name="_DataTable" />
+}
+@section Scripts
+{
+
+    <partial name="_Scripts" />
+}

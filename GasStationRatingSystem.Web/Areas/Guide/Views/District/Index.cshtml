@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_Layout";
+}
+@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+{
+
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>@CurrentForm.Title  </h4>
+        </div>
+    </div>
+    @if (CurrentForm.CurrentFormPermissionActions.AddHasPermission)
+    {
+
+
+    <section class="content-header">
+        <a class="btn btn-primary pull-left" href="@Url.GetAction("Create")">اضافة</a>
+
+    </section>
+    }
+</div>
+
+
+<partial name="_DataTable" />
+
+
+@section Scripts
+{
+
+    <partial name="_Scripts" model="new DistrictDTO()" />
+}
+
+}

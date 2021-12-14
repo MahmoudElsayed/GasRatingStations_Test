@@ -1,0 +1,12 @@
+﻿@model IQueryable<QuestionsOrderDTO>;
+
+@{ int i = 0;}
+    @foreach (var item in Model)
+    {
+        i++;
+
+        <li class="dd-item" data-order="@item.OrderNo" data-id="@item.Id">
+            <div class="dd-handle"><span class="dd-item-index">@i</span><span class="dd-item-text">@item.Text</span></div>
+        </li>
+
+    }

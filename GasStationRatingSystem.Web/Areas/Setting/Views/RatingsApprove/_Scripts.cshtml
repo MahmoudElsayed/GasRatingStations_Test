@@ -1,0 +1,197 @@
+﻿@using GasStationRatingSystem.Common.General;
+<script>
+    let DetailsModal = $('#Details-Modal');
+    $(document).ready(function () {
+        LoadTable();
+    });
+
+
+    //#region
+        function LoadTable() {
+        $('#tbl').DataTable().destroy();
+            dt = $('#tbl').DataTable({ "columnDefs": [{ "defaultContent": "-", "targets": "_all" }],
+
+                pageLength: 20,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [ 10, 25, 50, 75, 100 ],
+                sAjaxSource: '@Url.GetAction("LoadDataTable")',
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                dom: 'Blfrtip',
+                buttons: [
+
+
+                ],
+                columns: [
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row, meta) {
+                            return '<input type="hidden" name="visitInfoId" value="' + data.visitInfoId + '"><label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+
+                    },
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.inspectorName ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.stationName ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.visitTime ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return `<button class="btn btn-primary" data-stationName='${data.stationName}' data-id='${data.visitInfoId}' onclick="ShowDetails(this)"><i class="fa fa-eye"></i></button>` }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label data-No="' + data.approvalCaseNo+'">' + (data.approvalCaseText ?? "") + '</label>' }
+
+                    },
+
+
+
+                    {
+
+                        data: null,
+                        bSortable: false,
+                        render: function (data, type, row) {
+                            let btns = ``;
+
+                            if (data.approvalCaseNo == @((int)ApprovalCasesEnum.NotUsed)) {
+
+                                   @if (CurrentForm.CurrentFormPermissionActions.RejectHasPermission)
+                                    {
+                                       @:   btns += `<button  data-No='@((int)ApprovalCasesEnum.Rejected)' onclick='ChangeCase(this)' class="btn btn-danger ml-3"> رفض  </button>`;
+
+                                    }
+                                @if (CurrentForm.CurrentFormPermissionActions.ApprovedHasPermission)
+                                {
+
+                                
+                                @:btns += `<button  data-No='@((int)ApprovalCasesEnum.FirstApproval)' onclick='ChangeCase(this)' class="btn btn-success ml-3"> الاعتماد الاول </button>`;
+                                }
+                                }
+                                else if (data.approvalCaseNo==@((int)ApprovalCasesEnum.FirstApproval)) {
+
+
+
+                                   @if (CurrentForm.CurrentFormPermissionActions.RejectHasPermission)
+                                    {
+                                       @:   btns += `<button  data-No='@((int)ApprovalCasesEnum.Rejected)' onclick='ChangeCase(this)' class="btn btn-danger ml-3"> رفض  </button>`;
+
+                                    }
+                                   @if (CurrentForm.CurrentFormPermissionActions.FinalApprovedHasPermission)
+                                   {
+                                                                     @:  btns += `<button  data-No='@((int)ApprovalCasesEnum.SecondApproval)' onclick='ChangeCase(this)' class="btn btn-success ml-3"> الاعتماد الثاني </button>`;
+
+                                   }
+
+
+                            }
+                            else if (data.approvalCaseNo==@((int)ApprovalCasesEnum.Rejected)) {
+                                btns += data.rejectedComment??"";
+                            }
+                            return '<div>'+btns +'</div>';
+                        }
+                    }
+                ]
+            });
+
+        }
+
+    //#endregion
+
+    function ChangeCase(e) {
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+
+        var caseNo = btn.attr('data-no');
+
+        if (caseNo ==@((int)ApprovalCasesEnum.Rejected)) {
+            alertify.prompt('اكتب ملاحظاتك', '',
+                function (evt, value) {
+
+                    ChangeCaseAjax(id, caseNo,value);
+
+                }
+            ).set('labels', { ok: 'حفظ', cancel: 'خروج' });
+        }
+        else {
+            alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+                ChangeCaseAjax(id, caseNo,'');
+            },
+
+                function () { }
+            ).set('labels', { ok: 'نعم', cancel: 'لا' });
+        }
+
+    }
+    function ChangeCaseAjax(id, caseNo, rejectedComment) {
+        $.post('@Url.GetAction("ChangeCase")', { visitNoId: id, caseNo, rejectedComment }, function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                $('#tbl').DataTable().ajax.reload(false);
+
+
+            }
+            else {
+                alertify.alert(res.message).setHeader('توقف');
+
+            }
+
+
+
+
+        });
+
+    }
+
+
+    function ShowDetails(e) {
+
+        var btn = $(e);
+
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+         $.post('@Url.GetAction("GetQuestions")', { visitNoId: id }, function (res) {
+
+             let tbodyDetails = $('#tbodyDetails');
+             let lblName = $('#lblName');
+
+             lblName.html('');
+             lblName.html(btn.attr('data-stationName'));
+
+             tbodyDetails.html('');
+             tbodyDetails.html(res);
+             DetailsModal.modal('show')
+
+
+
+
+        });
+    }
+</script>

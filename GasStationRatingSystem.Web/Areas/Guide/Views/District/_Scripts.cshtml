@@ -1,0 +1,201 @@
+﻿@model DistrictDTO;
+
+<script>
+    $(document).ready(function () {
+        LoadTable();
+        LoadCities('@Model.CityId');
+
+    });
+    let form = $('#frm');
+    function Submit() {
+
+        event.preventDefault();
+
+        var valid = form.valid();
+        if (valid) {
+            Save();
+        }
+    }
+
+    function Save() {
+
+        $.post('@Url.GetAction("Save")', form.serialize() , function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                   setTimeout(function () {
+                        window.location.href = "@Url.GetAction("Index")";
+                    }, 2000);
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+
+        });
+
+    }
+
+        function LoadTable() {
+        $('#tbl').DataTable().destroy();
+            dt = $('#tbl').DataTable({ "columnDefs": [{ "defaultContent": "-", "targets": "_all" }],
+
+                pageLength: 20,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [ 10, 25, 50, 75, 100 ],
+                sAjaxSource: '@Url.GetAction("LoadDataTable")',
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                dom: 'Blfrtip',
+                buttons: [
+
+
+                ],
+                columns: [
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row, meta) {
+                            return '<input type="hidden" value="'+data.id+'"><label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+
+                    },
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label >' + (data.name ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label >' + (data.cityName ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label >' + (data.regionName ?? "") + '</label>' }
+
+                    },
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.addedDate ?? "") + '</label>' }
+
+                    },
+
+
+
+                    {
+
+                        data: null,
+                        bSortable: false,
+                        render: function (data, type, row) {
+                               let btn = `<div class="dropdown">
+        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-h"></i>  </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+`;
+                            btn += `
+
+
+                                                                  @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission) {
+                                                                    <li><a class="dropdown-item" href="@Url.GetAction("Edit")/${data.id}" onclick="Edit(this)">تعديل</a></li>
+                                                                  }
+                                                                   @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission) {
+                                                                  <li><a class="dropdown-item" onclick="Delete(this)" href="javascript:void(0)" >حذف</a></li>
+                                                                  }
+
+
+                                                           `;
+
+
+
+                            return btn +'</ul></div>';
+
+                        }
+                    }
+                ]
+            });
+
+        }
+    //#region Delete
+
+        function Delete(e) {
+
+        alertify.confirm().setting('modal', false);
+
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            $.post('@Url.GetAction("Delete")', {id:id}, function (res) {
+
+                 if (res.status) {
+                     alertify.success(res.message);
+                     btn.closest('tr').remove();
+
+
+                }
+                else {
+                    alertify.alert(res.message).setHeader('توقف');
+
+                }
+
+
+
+
+            });
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+    }
+        //#endregion
+
+    //#region Helpers
+    function LoadCities(cityId) {
+        var ddlCities = $('#ddlCities');
+        ddlddlRegions = $('#ddlRegions');
+        var regionId = ddlddlRegions.val();
+        console.log(cityId);
+        ddlCities.children().remove();
+
+         $.ajax({
+                type: "POST",
+                url: '@Url.GetAction("LoadCities")',
+                data: { regionId: regionId } ,
+                dataType: "json",
+              async: false,
+                success: function (res) {
+                    res.map(p => {
+                        cityId == p.value ?
+                            ddlCities.append(`<option selected='selected' value="${p.value}">${p.text}</option>`) :
+                            ddlCities.append(`<option value="${p.value}">${p.text}</option>`)
+                    });
+                    ddlCities.trigger('change');
+                },
+                error: function () {
+                }
+            });
+    }
+    //#endregion
+
+</script>

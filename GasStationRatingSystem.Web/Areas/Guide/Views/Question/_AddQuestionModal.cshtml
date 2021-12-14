@@ -1,0 +1,79 @@
+﻿
+<div class="modal fade" id="QuestionModal" tabindex="-1" role="dialog" aria-labelledby="addModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddQuestionModalTitle">اضافة سؤال </h5>
+                <h5 id="lblCountParents" style="display:none">
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="frmSaveQuestion">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label>الاسم </label>
+                                            <input type="hidden" name="ID" id="txtQuestionId" />
+                                            <input type="hidden" name="ParentId" id="txtParentId" />
+
+                                            <input name="Text" id="txtQuestionText" class="form-control" />
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3">
+                                            <label>الترتيب </label>
+
+                                            <input name="OrderNo" id="txtOrderNo" onkeypress="return isNumberKey(event);" class="form-control" />
+                                        </div>
+                                        <div class="col-lg-3 col-md-3" id="divIsLastQuestion">
+                                            <label>سؤال؟</label>
+                                            <label class="switch">
+                                                <input name="IsLastQuestion" id="chkIsLastQuestion" class="IsLastQuestion" type="checkbox" checked="" onchange="ShowOrHideDivAnswers(this)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row" id="divAnswers">
+                                        <div class="col-lg-6 col-md-6">
+                                            <label>انواع الاجابات </label>
+                                            <select class="form-control select2" name="AnswersCategoriesIds" multiple="" asp-items="ViewBag.AnswersCategories" id="ddlAnswersCategories"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-6">
+                                            <button type="button" class="btn btn-primary mt-5" onclick="Save()" id="btnSave">حفظ</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">اغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>

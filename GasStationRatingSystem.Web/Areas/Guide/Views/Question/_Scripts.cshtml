@@ -1,0 +1,279 @@
+﻿<script>
+
+    var QuestionModal = $('#QuestionModal'), AddQuestionModalTitle = $('#AddQuestionModalTitle'),
+        frmSaveQuestion = $('#frmSaveQuestion'), txtQuestionId = $('#txtQuestionId'), txtParentId = $('#txtParentId'),
+        txtQuestionText = $('#txtQuestionText'), txtOrderNo = $('#txtOrderNo'), ddlAnswersCategories = $('#ddlAnswersCategories'),
+        divAnswers = $('#divAnswers'), OrderQuestionModal = $('#OrderQuestionModal'), divOrderedQuestions = $('#divOrderedQuestions'),
+        OrderQuestionModalTitle = $('#OrderQuestionModalTitle'),
+        divIsLastQuestion = $('#divIsLastQuestion'), lblCountParents=$('#lblCountParents'),
+        chkIsLastQuestion = $('#chkIsLastQuestion');
+    $(document).ready(function () {
+
+        LoadQuestionsTreeView();
+    });
+    function LoadQuestionsTreeView() {
+        @if (!CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+        {
+        @:return false;
+        }
+
+        $.post('@Url.GetAction("GetQuestionsTreeView")', {}, function (res) {
+                if (res.status) {
+                $('#treeview1').treeview({
+
+
+                    showTags: true,
+
+                    data: res.data,
+
+                });
+
+
+                //$.each($('.expand-icon'), function (index, value) {
+                //        try {
+                //        $('.expand-icon')[index].click();
+                //        }
+                //        catch {}
+                //    })
+            }
+            });
+        }
+
+
+    function DeleteQuestion(elem) {
+
+
+
+        alertify.confirm().setting('modal', false);
+
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            var btn = $(elem);
+            var questionId = btn.attr('data-id');
+        $.post('@Url.GetAction("DeleteQuestionFromTreeView")', { questionId}, function (res) {
+            if (res.status) {
+              //  $('#btnDelete_' + questionId).parent().parent().remove();
+
+                alertify.success(res.message);
+                LoadQuestionsTreeView();
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+        });
+
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+
+
+    }
+
+
+
+
+
+
+
+    function SaveQuestionlModal(elem) {
+        var btn = $(elem);
+        var QuestionType = btn.attr('data-type');
+        var id = btn.attr('data-id');
+        var text = btn.attr('data-text');
+        var orderNo = btn.attr('data-order');
+        var operation = btn.attr('data-operation');
+        var parentId = btn.attr('data-parentId');
+
+
+        ResetSaveQuestionForm();
+
+        if (orderNo != undefined || orderNo!=null) {
+            txtOrderNo.val(orderNo);
+
+        }
+        AddQuestionModalTitle.html(`اضافة سؤال`);
+        if (operation == 'edit') {
+            divAnswers.hide();
+            divIsLastQuestion.hide();
+            chkIsLastQuestion.prop('checked', true);
+        }
+        else {
+            divAnswers.show();
+            divIsLastQuestion.show();
+
+        }
+        if (text != undefined || text != null) {
+
+            if (operation == 'add') {
+                AddQuestionModalTitle.html(`اضافة سؤال لـــ "${text}"`)
+
+
+            }
+            else {
+                txtQuestionText.val(text);
+                AddQuestionModalTitle.html(`تعديل سؤال "${text}"`);
+                txtQuestionId.val(id);
+                txtParentId.val(parentId);
+                //if (QuestionType == 'child') {
+                //    var AnswerCategoriesIds = btn.attr('data-AnswerCategoriesIds');
+                //    ddlAnswersCategories.val(AnswerCategoriesIds).trigger('change');
+                //}
+            }
+        }
+
+
+        if (QuestionType == 'child' && operation=='add') {
+
+
+
+            $.post('@Url.GetAction("CheckAddChild")', { parentId: id }, function (res) {
+                if (!res.status) {
+                    alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+                    return;
+                }
+                else {
+                    txtParentId.val(id);
+                    QuestionModal.modal('show');
+                    lblCountParents.text(res.data);
+
+                }
+            });
+
+
+
+
+        }
+        else {
+            if (QuestionType=='parent') {
+                txtParentId.val(id);
+                lblCountParents.text(55);
+            }
+
+
+            QuestionModal.modal('show');
+        }
+    }
+    function ResetSaveQuestionForm() {
+        frmSaveQuestion[0].reset();
+        txtParentId.val('');
+        txtQuestionText.val('');
+        txtOrderNo.val('');
+        txtQuestionId.val('');
+        lblCountParents.text('');
+        $('#ddlAnswersCategories').val('').trigger('change')
+
+    }
+    function Save() {
+
+
+        var count = lblCountParents.text();
+
+        if (txtQuestionText.val().trim()=='') {
+              alertify.alert('من فضلك ادخل نص السؤال').setHeader('@AppConstants.Messages.StopTitle');
+
+            return;
+        }
+        if (txtOrderNo.val().trim()=='') {
+              alertify.alert('من فضلك ادخل ترتيب السؤال').setHeader('@AppConstants.Messages.StopTitle');
+
+            return;
+        }
+        if (chkIsLastQuestion.prop('checked') && ddlAnswersCategories.val()=='') {
+
+             alertify.alert('قم باختيار نوع واحد على الاقل من انواع الاجابات').setHeader('@AppConstants.Messages.StopTitle');
+
+            return;
+        }
+        if (count == 2 && ddlAnswersCategories.val() == '') {
+                 alertify.alert('يجب ان تقوم باختيار انواع اجابات لهذا السؤال').setHeader('@AppConstants.Messages.StopTitle');
+
+            return;
+        }
+
+
+        $.post('@Url.GetAction("Save")', frmSaveQuestion.serialize() , function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                QuestionModal.modal('hide');
+                LoadQuestionsTreeView();
+                ResetSaveQuestionForm();
+
+
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+
+        });
+
+
+    }
+
+    //#region OrderedQuestions
+    function ShowOrderedQuestions(elem) {
+        var btn = $(elem);
+        var id = btn.attr('data-id');
+        var text = btn.attr('data-text');
+
+        $.post('@Url.GetAction("GetQuestionsForOrder")', { id }, function (res) {
+
+            divOrderedQuestions.html(res);
+            $('.dd-empty').remove();
+            OrderQuestionModalTitle.html('ترتيب '+text);
+            OrderQuestionModal.modal('show');
+
+        });
+    }
+    function SaveQuestionsOrder() {
+        var orderedQuestionsLis = divOrderedQuestions.find('li');
+        var orderedQuestionsArray = [];
+        var index = 1;
+        for (var item of orderedQuestionsLis) {
+            orderedQuestionObj = new Object();
+            var li = $(item);
+            orderedQuestionObj.Id = li.attr('data-id');
+            orderedQuestionObj.OrderNo = index++;
+                //li.attr('data-order');
+            orderedQuestionsArray.push(orderedQuestionObj);
+        }
+        $.post('@Url.GetAction("SaveQuestionsOrder")', { mdl: orderedQuestionsArray}, function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                OrderQuestionModal.modal('hide');
+                LoadQuestionsTreeView();
+
+
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+
+        });
+    }
+    //#endregion
+    function ShowOrHideDivAnswers(elem) {
+        var chk = $(elem);
+        if (chk.prop('checked')) {
+            divAnswers.show();
+        }
+        else {
+            $('#ddlAnswersCategories').val('').trigger('change')
+
+            divAnswers.hide();
+        }
+    }
+
+</script>

@@ -1,0 +1,262 @@
+﻿@{
+    Layout = "_Layout";
+}
+@if (CurrentForm.CurrentFormPermissionActions.AddHasPermission)
+{
+    @model GasStationDTO;
+
+    <form id="frm" onsubmit="Submit()">
+
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <a href="@Url.GetAction("Index")">
+                    <div class="welcome-text">
+                        <h4>@CurrentForm.Title   </h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 p-md-0 ">
+                <button class="btn btn-primary pull-left" id="btnSave" type="submit">حفظ</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6">
+                                <label>الاسم </label>
+                                <input type="hidden" asp-for="ID" />
+                                <input id="txtBranchName" asp-for="Name" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>اسم المالك </label>
+                                <input id="txtOwner" asp-for="OwnerName" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>اسم المُشغل </label>
+                                <input id="txtLauncherName" asp-for="LauncherName" class="form-control" />
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>الكود </label>
+                                <input asp-for="Code" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>الاسم في الرخصة </label>
+                                <input asp-for="NameInLicense" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>الرقم البريدي </label>
+                                <input asp-for="PostCode" class="form-control" />
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>دائرة العرض </label>
+                                <input asp-for="Lat" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>خط الطول </label>
+                                <input asp-for="Lng" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>رقم المبنى </label>
+                                <input asp-for="BuildingNo" class="form-control" />
+                            </div>
+
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>الاسم في الرخصة </label>
+                                <input asp-for="NameInLicense" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>الرقم البريدي </label>
+                                <input asp-for="PostCode" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>مساحة المحطة </label>
+                                <input asp-for="AreaName" class="form-control" />
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>عدد العمال </label>
+                                <input asp-for="WorkerCount" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>عدد ساعات العمل اليومية</label>
+                                <input asp-for="CountOfDailyWorkingHours" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>عدد انابيب التهوية </label>
+                                <input asp-for="CountOfVentilationTubes" class="form-control" />
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>ارتفاع انابيب التهوية </label>
+                                <input asp-for="HeightOfVentilationPipe" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>رقم الكهرباء</label>
+                                <input asp-for="ElectricityNumber" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description North </label>
+                                <input asp-for="EnvDescriptionNorth" class="form-control" />
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description North Notes</label>
+                                <input asp-for="EnvDescriptionNorthNotes" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description East</label>
+                                <input asp-for="EnvDescriptionEast" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description East Notes </label>
+                                <input asp-for="EnvDescriptionEastNotes" class="form-control" />
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description West</label>
+                                <input asp-for="EnvDescriptionWest" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description West Notes</label>
+                                <input asp-for="EnvDescriptionWestNotes" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description South </label>
+                                <input asp-for="EnvDescriptionSouth" class="form-control" />
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>Env Description South Notes</label>
+                                <input asp-for="EnvDescriptionSouthNotes" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>صورة اللوحة</label>
+                                <select asp-for="PlatePicture" class="form-control select2">
+                                    <option value="يوجد">يوجد</option>
+                                    <option value="لايوجد">لايوجد</option>
+
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>كود المحطة </label>
+                                <input asp-for="Code" class="form-control" />
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>فئة المحطة</label>
+                                <input asp-for="StationClass" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>حالة المحطة</label>
+                                <input asp-for="StatusText" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>فرع الهيئة </label>
+                                <input asp-for="AuthorityBranch" class="form-control" />
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>اسم الشارع</label>
+                                <input asp-for="StreetName" class="form-control" />
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label>الاعتماد </label>
+                                <select asp-for="Accreditation" class="form-control select2">
+                                    <option value="معتمد">معتمد</option>
+                                    <option value="غير معتمد">غير معتمد</option>
+
+                                </select>
+                            </div>
+
+                            <div class="col-lg-3 col-md-3">
+                                <label>الفرع </label>
+                                <select onchange="LoadRegions()" asp-items="ViewBag.Branches" id="ddlBranches" name="Branches" class="form-control select2">
+                                    <option value="@Guid.Empty" hidden="">اختر</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label>المنطقة </label>
+                                <select onchange="LoadCities()" id="ddlRegions" name="Regions" class="form-control select2">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label> المدينة </label>
+                                <select onchange="LoadDitricts()" id="ddlCities" name="Cities" class="form-control select2">
+                                </select>
+                            </div>
+
+
+
+                            <div class="col-lg-3 col-md-3">
+                                    <label>الحي </label>
+                                    <select id="ddlDistricts" asp-for="DistrictId" class="form-control select2">
+                                    </select>
+                            </div>
+
+
+                            @*<div class="col-lg-3 col-md-6">
+            <div style="display:block" class="col-lg-3 col-md-6">
+                <label>المدينة</label>
+                <input asp-for="CityName" class="form-control" />
+            </div>
+
+        </div>*@
+                            @*<div class="col-lg-3 col-md-6">
+            <div style="display:block" class="col-lg-3 col-md-6">
+                <label>الحي </label>
+                <input asp-for="DistrictName" class="form-control" />
+            </div>
+        </div>*@
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    @section Scripts
+{
+
+        <partial name="_Scripts" />
+    }
+
+}

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<UserPermissionsDTO>
+@{ int index = 1;}
+@foreach (var item in Model)
+{
+<tr>
+    <td>
+        @(index++)
+        <input type="hidden" name="PageId" value="@item.PageId" />
+
+    </td>
+
+
+    <td>@item.PageName</td>
+    <td>
+        @{ string Checked = item.AddPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Add" class="Permission" type="checkbox" @Checked>
+            <span class="slider round"></span>
+        </label>
+    </td>
+    <td>
+        @{ string ShowPermission = item.ShowPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Show" class="Permission" type="checkbox" @ShowPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+    <td>
+        @{ string EditPermission = item.EditPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Edit" class="Permission" type="checkbox" @EditPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+
+    <td>
+        @{ string DeletePermission = item.DeletePermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Delete" class="Permission" type="checkbox" @DeletePermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+
+    <td>
+        @{ string ApprovedPermission = item.ApprovedPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Approved" class="Permission" type="checkbox" @ApprovedPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+
+    <td>
+        @{ string RejectPermission = item.RejectPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="Reject" class="Permission" type="checkbox" @RejectPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+    <td>
+        @{ string FinalApprovedPermission = item.FinalApprovedPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="FinalApproved" class="Permission" type="checkbox" @FinalApprovedPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+    <td>
+        @{ string RegionsToUserPermission = item.RegionsToUserPermission ? "checked" : ""; }
+        <label class="switch">
+            <input name="RegionsToUser" class="Permission" type="checkbox" @RegionsToUserPermission>
+            <span class="slider round"></span>
+        </label>
+    </td>
+
+    <td>
+        <label class="switch">
+            <input onchange="CheckUnCheckAll(this)" type="checkbox" >
+            <span class="slider round"></span>
+        </label>
+    </td>
+</tr>
+}

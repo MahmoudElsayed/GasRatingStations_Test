@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "_Layout";
+}
+@if (CurrentForm.CurrentFormPermissionActions.AddHasPermission)
+{
+    @model DistrictDTO;
+
+    <form id="frm" onsubmit="Submit()">
+
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <a href="@Url.GetAction("Index")">
+                    <div class="welcome-text">
+                        <h4>@CurrentForm.Title   </h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 p-md-0 ">
+                <button class="btn btn-primary pull-left" id="btnSave" type="submit">حفظ</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <input type="hidden" asp-for="ID" />
+
+
+                            <div class="col-lg-3 col-md-3">
+                                <label>المنطقة </label>
+                                <select id="ddlRegions" onchange="LoadCities()" asp-items='new SelectList((IQueryable<SelectListDTO>)ViewData["Regions"], "Value", "Text")' class="form-control select2">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label>المدينة </label>
+                                <select asp-for="CityId" id="ddlCities" class="form-control select2">
+                                </select>
+                                <span asp-validation-for="CityId"></span>
+
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6">
+                                <label>الاسم </label>
+                                <input id="txtBranchName" asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name"></span>
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    @section Scripts
+{
+
+        <partial name="_Scripts" model="Model" />
+    }
+}

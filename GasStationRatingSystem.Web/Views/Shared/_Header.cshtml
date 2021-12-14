@@ -1,0 +1,66 @@
+﻿
+
+@inject GasStationRatingSystem.BLL.UserBll _userBll;
+<header id="page-topbar" style="height:100px;">
+    <div style="align-items: center; border-radius: 0.375rem;" class="row bg-light mx-0  ">
+        <div class="col-lg-7  col-md-10 p-2">
+            <a href="@Url.Action("Index","Home")" class="logo logo-dark">
+                <img src="@Url.Content("~/images/main-logo.png")" class="img-fluid">
+            </a>
+        </div>
+
+        <div class="col-lg-5 p-2 d-lg-block d-none text-center">
+            <h4 style="color: #334960 !important" class="mb-2 ">
+                برنامج الفحص الدوري لمحطات الوقود والغسيل والتشحيم
+            </h4>
+            <h4 style="color: #3679AA !important;" class="mb-0 ">نظام التقييم والتصنيف البيئي لمحطات الوقود</h4>
+
+        </div>
+        <div class="col-md-2 d-none d-sm-block d-md-block">
+            <button type="button" onclick='showmenu();' class="btn btn-primary btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+        </div>
+    </div>
+    <div class="navbar-header" style="display:none">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="@Url.Action("Index","Home")" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img class="logo-abbr" src="@Url.Content("~/images/main-logo.png")" alt="" style="max-width:200px !important;max-height: 70px !important;margin: 0 auto;">
+                    </span>
+                    <span class="logo-lg">
+                        <img class="logo-abbr" src="@Url.Content("~/images/main-logo.png")" alt="" style="max-width: 200px !important; max-height: 70px !important; margin: 0 auto;">
+                    </span>
+                </a>
+
+                <a href="@Url.Action("Index","Home")" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img class="logo-abbr" src="@Url.Content("~/images/main-logo.png")" alt="" style="        max-width: 200px !important;
+        max-height: 70px !important;
+        margin: 0 auto;">
+                    </span>
+                    <span class="logo-lg">
+                        <img class="logo-abbr" src="@Url.Content("~/images/main-logo.png")" alt="" style="        max-width: 200px !important;
+        max-height: 70px !important; margin: 0 auto;">
+                    </span>
+                </a>
+            </div>
+
+
+            <!-- App Search-->
+            @*<form class="app-search d-none d-lg-block">
+                    <div class="position-relative">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>*@
+        </div>
+
+    </div>
+</header>
+<!--**********************************
+    Header end ti-comment-alt
+***********************************-->

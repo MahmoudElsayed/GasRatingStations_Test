@@ -1,0 +1,93 @@
+﻿<style>
+    body {
+        background: #ebeef6 !important;
+    }
+
+    .piee {
+        width: 100%;
+        direction: ltr;
+        position: relative
+    }
+
+    .canvasjs-chart-container {
+        height: 300px
+    }
+
+    .pie-border.card {
+        box-shadow: 1px 1px 7px 0px #656565;
+        border-radius: 10px
+    }
+
+        .pie-border.card .card-header, .pie-border.card .card-footer {
+            color: white
+        }
+
+    .piee canvas {
+        max-width: 100%;
+    }
+
+    .pie-border.card .table {
+        color: white
+    }
+
+    .pie-border .dash-icon i {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        float: left
+    }
+
+    .pie-border {
+        padding: 1.5rem;
+        box-shadow: 1px 1px 7px 0px #6565653d;
+        border-radius: 10px;
+    }
+
+        .pie-border .dash-icon {
+            overflow: hidden;
+        }
+    .ratetable .bg-1 { background: #2ead56}
+    .ratetable .bg-2 {background: #fafe2d }
+    .ratetable .bg-3 {background: #fbc429}
+    .ratetable .bg-4 {background: #c08c1e}
+    .ratetable .bg-5 {background: #f30213}
+</style>
+<!--**********************************
+      Content body start
+  ***********************************-->
+
+<!-- Styles -->
+<style>
+    .chartdiv {
+        width: 65% !important;
+        display: block !important;
+        margin-top: 42px !important;
+    }
+
+        .chartdiv * {
+            direction: ltr
+        }
+
+    #divCities > div > div > div.card-header {
+        color: black !important;
+        font-weight: bold;
+        font-size: 19px;
+    }
+</style>
+
+
+<partial name="_Dashboard" />
+@section Scripts
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/21.2.3/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/21.2.3/css/dx.light.css" />
+    <script src="https://cdn3.devexpress.com/jslib/21.2.3/js/dx.all.js"></script>
+
+    <script src="~/js/canvasjs.min.js"></script>
+
+    <partial name="_Scripts" />
+}

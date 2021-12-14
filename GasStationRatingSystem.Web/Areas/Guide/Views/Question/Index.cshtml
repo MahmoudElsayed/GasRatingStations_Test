@@ -1,0 +1,61 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<link href="~/lib/treeview/bootstrap-treeview.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+@*<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">*@
+@*@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+    {*@
+<partial name="_TreeStyle" />
+<partial name="_Style" />
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>@CurrentForm.Title </h4>
+        </div>
+
+    </div>
+    <section class="content-header">
+        @if (CurrentForm.CurrentFormPermissionActions.AddHasPermission)
+        {
+
+
+
+            <button type="button" data-type="parent" data-operation="add" data-id="" class="btn btn-primary" onclick="SaveQuestionlModal(this)"><i class="fas fa-plus"></i></button>
+        }
+        @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission)
+        {
+
+            <button type="button" data-Id="" data-text="الرئيسية" class="btn btn-warning ml-2" onclick="ShowOrderedQuestions(this)"><i class="fas fa-sort-numeric-up"></i></button>
+        }
+
+
+    </section>
+
+</div>
+@if (CurrentForm.CurrentFormPermissionActions.AddHasPermission)
+{
+    <partial name="_AddQuestionModal" />
+}
+@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+{
+    <partial name="_QuestionTree" />
+
+}
+<partial name="_QuestionsOrderModal" />
+@section Scripts
+{
+    <script src="~/lib/treeview/bootstrap-treeview.js"></script>
+    <script src="@Url.Content("~/vendor/nestable2/js/jquery.nestable.min.js")"></script>
+
+
+    <partial name="_Scripts" />
+    <partial name="_QuestionsOrderScripts" />
+
+
+}
+
+@*}*@
+

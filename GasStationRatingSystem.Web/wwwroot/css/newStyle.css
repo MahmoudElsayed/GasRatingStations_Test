@@ -1,0 +1,61 @@
+/* *{
+    direction: rtl;
+}
+.header-left .search_bar{
+    margin-right: 267px;
+}
+
+
+[data-sidebar-style="mini"][data-layout="vertical"] .fixed-content-box + .header {
+    padding-right: 20.937rem;
+}
+@media only screen and (min-width: 991px){
+    [data-sidebar-style="mini"][data-layout="vertical"] .fixed-content-box + .header {
+        padding-right: 20.937rem !important; } }
+
+       
+        [data-sidebar-style="mini"][data-layout="vertical"] .fixed-content-box + .header + .deznav + .content-body {
+            margin-right: 20.937rem;
+        }
+    
+.fixed-content-box{
+    right: 5rem;
+} */
+/*[direction="rtl"] .header-left input {
+    text-align: right;
+}
+
+.header-left .search_bar .search_icon i {
+    margin-right: 15px;
+}
+
+[direction="rtl"] .header-left .search_bar .search_icon {
+    border-top-left-radius: 5rem;
+    border-bottom-left-radius: 5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 359%;
+}*/
+.pulse-css{
+    left: 5px !important;
+}
+
+.header-right .header-profile > a.nav-link .header-info {
+    padding-right: 10px;
+}
+
+.chart-point .chart-point-list {
+    padding-right: 5px;
+}
+
+    .chart-point .chart-point-list li {
+        font-size: 12px;
+    }
+
+[direction="rtl"] .deznav .metismenu .has-arrow:after {
+    right: 1.5625rem;
+    left: auto;
+}
+/* .card-body.left .bootstrap-select .dropdown-toggle .filter-option-inner-inner{
+    text-align: left;
+} */

@@ -1,0 +1,109 @@
+﻿<script>
+
+    let txtFromDate = $('#txtFromDate'),
+        txtToDate = $('#txtToDate'),
+        ddlUsers = $('#ddlUsers'),
+        ddlQuestions = $('#ddlQuestions'),
+        ddlBranches = $('#ddlBranches'),
+        ddlRegions = $('#ddlRegions'),
+        ddlCities = $('#ddlCities'),
+        ddlDistricts = $('#ddlDistricts'),
+        ddlStations = $('#ddlStations'),
+        divReport = $('#divReport');
+
+        //#region Ajax
+    function LoadRegions() {
+        $.post('@Url.GetAction("GetRegions")', { branchIds: ddlBranches.val() }, function (res) {
+            ddlRegions.children().remove();
+            res.map(p => {
+                ddlRegions.append(`<option value='${p.value}'>${p.text}</option>`);
+            });
+            ddlRegions.trigger('change');
+        });
+    }
+        function LoadCities() {
+            $.post('@Url.GetAction("GetCities")', { regionIds: ddlRegions.val() }, function (res) {
+                ddlCities.children().remove();
+            res.map(p => {
+                ddlCities.append(`<option value='${p.value}'>${p.text}</option>`);
+            });
+                ddlCities.trigger('change');
+        });
+    }
+           function LoadDitricts() {
+               $.post('@Url.GetAction("GetDistricts")', { cityIds: ddlCities.val() }, function (res) {
+                   ddlDistricts.children().remove();
+            res.map(p => {
+                ddlDistricts.append(`<option value='${p.value}'>${p.text}</option>`);
+            });
+                   ddlDistricts.trigger('change');
+               });
+
+    }
+
+    function LoadStations() {
+        $.post('@Url.GetAction("GetStations")', { districtIds: ddlDistricts.val() }, function (res) {
+            ddlStations.children().remove();
+            res.map(p => {
+                ddlStations.append(`<option value='${p.value}'>${p.text}</option>`);
+            });
+
+        });
+
+    }
+
+        //#endregion
+    function Download() {
+        var obj = new Object();
+        obj.FromDate = txtFromDate.val();
+        obj.ToDate = txtToDate.val();
+        obj.UserIds = ddlUsers.val().toString();
+        obj.BranchIds = ddlBranches.val().toString();
+        obj.RegionIds = ddlRegions.val().toString();
+        obj.CityIds = ddlCities.val().toString();
+        obj.DistrictIds = ddlDistricts.val().toString();
+        obj.StationIds = ddlStations.val().toString();
+
+        //if (ddlUsers.val().toString() == '') {
+        //    var userIdsArray = [];
+
+        //    ddlUsers.children().each(function (k, v) {
+        //        userIdsArray.push($(v).val());
+        //    });
+        //    obj.UserIds = userIdsArray.toString();
+        //    console.log('allUsers');
+        //}
+
+        $.post('@Url.GetAction("Download")', { mdl: obj }, function (res) {
+            if (res.data.status) {
+                alertify.success(res.data.message);
+                var link = document.createElement('a');
+                link.href = '/' + res.file.path;
+                link.download = res.file.fileName;
+                link.click();
+            }
+            else {
+                alertify.alert(res.data.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+        });
+    }
+    function selectAll(id) {
+
+        var btn = $(event.target);
+        if (btn.html() == 'تحديد الكل') {
+            var options = $(id).children();
+            for (i = 0; i < options.length; i++) {
+                options[i].selected = "true";
+            }
+            btn.html('الغاء التحديد');
+        }
+        else {
+            $(id).val('');
+            btn.html('تحديد الكل');
+
+        }
+
+        $(id).trigger('change');
+    }
+</script>

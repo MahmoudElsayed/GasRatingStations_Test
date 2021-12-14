@@ -1,0 +1,120 @@
+﻿@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+{
+
+    @section Styles  {
+
+        <link rel="stylesheet" href="@Url.Content("~/css/thirdparty.bundle.css")" />
+        <link rel="stylesheet" href="@Url.Content("~/css/viewer.part.bundle.css")" />
+
+        <script src="@Url.Content("~/js/thirdparty.bundle.js")"></script>
+        <script src="@Url.Content("~/js/viewer.part.bundle.js")"></script>
+    }
+
+    <form id="frm">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>@CurrentForm.Title  </h4>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" style=" align-items: end;">
+                            <div class="col-lg-2 col-md-2">
+                                <label>من تاريخ </label>
+                                <input id="txtFromDate" name="FromDate" class="form-control datexop" />
+
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <label>الى تاريخ </label>
+                                <input id="txtToDate" name="ToDate" class="form-control datexop" />
+
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <label>المفتشين </label>
+                                <select multiple="" asp-items="ViewBag.Users" id="ddlUsers" name="UserId" class="form-control select2">
+                                </select>
+                            </div>
+                        
+                            <div class="col-lg-2 col-md-2">
+                            </div>
+                        </div>
+                        <div class="row" style=" align-items: end;">
+
+                            <div class="col-lg-3 col-md-3">
+                                <label>الفروع </label>
+                                <select onchange="LoadRegions()" asp-items="ViewBag.Branches" id="ddlBranches" multiple="" name="Branches" class="form-control select2">
+                                    <option value="@Guid.Empty" hidden="">اختر</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label>المناطق </label>
+                                <button type="button" class="btn btn-success" onclick="selectAll('#ddlRegions')">تحديد الكل</button>
+                                <select onchange="LoadCities()" id="ddlRegions" multiple="" name="Regions" class="form-control select2">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label>المدن </label>
+                                <button type="button" class="btn btn-success" onclick="selectAll('#ddlCities')">تحديد الكل</button>
+
+                                <select onchange="LoadDitricts()" id="ddlCities" multiple="" name="Cities" class="form-control select2">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label>الاحياء </label>
+                                <button type="button" class="btn btn-success" onclick="selectAll('#ddlDistricts')">تحديد الكل</button>
+
+                                <select id="ddlDistricts" onchange="LoadStations()" multiple="" name="Districts" class="form-control select2">
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <label>المحطات </label>
+                                <button type="button" class="btn btn-success" onclick="selectAll('#ddlStations')">تحديد الكل</button>
+
+                                <select id="ddlStations" name="ddlStations" multiple="" class="form-control select2">
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row" style="align-items:end;">
+
+                            <div class="col-lg-3 col-md-3">
+                                <label></label>
+                                <button id="btnView" class="btn btn-primary mt-3" type="button" onclick="Download()">عرض</button>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row" style=" align-items: end;">
+
+                            <div id="divReport" class="col-lg-12 col-md-12">
+                                <label></label>
+
+                            </div>
+
+                        </div>
+                        <div class="row" style=" align-items: end;">
+
+                            <div class="col-lg-12 col-md-12">
+                                <hr />
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @section Scripts{
+        <partial name="_Scripts" />
+    }
+}

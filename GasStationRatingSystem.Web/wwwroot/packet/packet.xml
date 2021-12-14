@@ -1,0 +1,12 @@
+<packet>
+  <subdomain>
+    <add>
+      <parent>mtx-it.com</parent>
+      <name>testapp</name>
+      <property>
+        <name>www_root</name>
+        <value>/textapp.mtx-it.com</value>
+      </property>
+    </add>
+  </subdomain>
+</packet>

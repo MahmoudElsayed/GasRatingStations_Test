@@ -1,0 +1,450 @@
+﻿<script>
+    let form = $('#frm')
+        , ddlBranches = $('#ddlBranches'),
+        ddlRegions = $('#ddlRegions'),
+        ddlCities = $('#ddlCities'),
+        ddlDistricts = $('#ddlDistricts'),
+        IsEdit = false;
+    function Submit() {
+
+        event.preventDefault();
+
+        var valid = form.valid();
+        if (valid) {
+            Save();
+        }
+    }
+    function Save() {
+
+        if (ddlStations.val().length == 0) {
+            return;
+        }
+        if (ddlUsers.val() == '') {
+            return;
+        }
+
+        var ArrayObj = [];
+        $.each(ddlStations.val(), function (k, v) {
+            var obj = new Object();
+
+            obj.ID = $('#txtId').val();
+            obj.UserId = ddlUsers.val();
+            obj.StationId = v;
+            ArrayObj.push(obj);
+        });
+
+        $.post('@Url.GetAction("Save")', { mdl: ArrayObj} , function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                form[0].reset();
+                ddlStations.val('').trigger('change');
+                ddlRegions.val('').trigger('change');
+                ddlUsers.val('').trigger('change');
+                $('#txtId').val('');
+                IsEdit = false;
+                $('#tbl').DataTable().ajax.reload();
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+
+        });
+
+    }
+    function LoadTable() {
+        $('#tbl').DataTable().destroy();
+            dt = $('#tbl').DataTable({ "columnDefs": [{ "defaultContent": "-", "targets": "_all" }],
+
+                pageLength: 20,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [ 10, 25, 50, 75, 100 ],
+                sAjaxSource: '@Url.GetAction("LoadDataTable")',
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                dom: 'Blfrtip',
+                buttons: [
+
+
+                ],
+                columns: [
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row, meta) {
+                            return '<input type="hidden" name="' + data.userName + '" value="' + data.id + '"> <label style="display:none;" name="CityId" CityId="' + data.cityId + '"></label> <label style="display:none;" name="DistrictId" DistrictId="' + data.districtId + '"></label> <label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+
+                    },
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label name="UserId" UserId="' + data.userId +'" >' + (data.userName ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return `<label data-branchId='${data.branchId}' data-regionId='${data.regionId}' data-cityId='${data.cityId}' data-districtId='${data.districtId}' name="StationId" StationId='${data.stationId}' > ${data.stationName ?? ""} </label>` }
+
+                    },
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.addedDate ?? "") + '</label>' }
+
+                    },
+
+
+
+                    {
+
+                        data: null,
+                        bSortable: false,
+                        render: function (data, type, row) {
+                               let btn = `<div class="dropdown">
+        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-h"></i>  </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+`;
+                            btn += `
+
+
+                                                                  @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission) {
+                                                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="Edit(this)">تعديل</a></li>
+                                                                  }
+                                                                   @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission) {
+                                                                  <li><a class="dropdown-item" onclick="Delete(this)" href="javascript:void(0)" >حذف</a></li>
+                                                                  }
+
+
+                                                           `;
+
+
+
+                            return btn +'</ul></div>';
+                        }
+                    }
+                ]
+            });
+
+        }
+
+
+
+  //#region Delete
+
+        function Delete(e) {
+
+        alertify.confirm().setting('modal', false);
+
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            $.post('@Url.GetAction("Delete")', {id:id}, function (res) {
+
+                 if (res.status) {
+                     alertify.success(res.message);
+                     btn.closest('tr').remove();
+
+
+                }
+                else {
+                    alertify.alert(res.message).setHeader('توقف');
+
+                }
+
+
+
+
+            });
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+    }
+        //#endregion
+    function Edit(e) {
+        var btn = $(e);
+        var tr = $(btn.closest('tr'));
+        var id = tr.find('input[type=hidden]').val();
+        IsEdit = true;
+
+        var branchId = tr.find('label[name=StationId]').attr('data-branchId');
+
+        var regionId = tr.find('label[name=StationId]').attr('data-regionId');
+        var cityId = tr.find('label[name=StationId]').attr('data-cityId');
+        var districtId = tr.find('label[name=StationId]').attr('data-districtId');
+
+        var UserId = tr.find('label[name=UserId]').attr('UserId');
+        var StationId = tr.find('label[name=StationId]').attr('StationId');
+        MainRegionId = '', MainCityId = '', MainDistrictId = '', MainUserId = '', MainStationId = [];
+
+
+
+        MainUserId = UserId;
+        MainStationId = StationId;
+
+        console.log(regionId, cityId, districtId);
+        //$('#txtUserName').val(UserName);
+        //$('#txtEmail').val(Email);
+        //$('#chkIsActive').prop('checked', IsActive);
+
+
+
+        $('#txtId').val(id);
+        ddlBranches.val(branchId).trigger('change');
+        LoadRegions(regionId, cityId, districtId, MainUserId, MainStationId);
+        window.scrollTo(0, 0);
+
+    }
+
+    var ddlStations = $('#StationId');
+    var ddlUsers = $('#UserId');
+
+    $(document).ready(function () {
+        LoadCities();
+        @if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+            {
+
+             @:   LoadTable();
+            }
+
+        });
+
+    //#region Helpers
+
+    function LoadCities(id) {
+          $.post('@Url.GetAction("LoadCities")', {  }, function (res) {
+              ddlCities.children().remove();
+              $.each(res, function (k, v) {
+                  if (id==v.id) {
+                      ddlCities.append(`<option selected='' value='${v.value}'>${v.text}</option>`);
+                      return;
+                  }
+                  else
+                      ddlCities.append(`<option value='${v.value}'>${v.text}</option>`);
+            });
+              ddlCities.trigger('change');
+
+        });
+    }
+    function LoadUsers(regionId,id) {
+
+
+        $.post('@Url.GetAction("LoadUsers")', { regionId: regionId }, function (res) {
+            ddlUsers.children().remove();
+            $.each(res, function (k, v) {
+                if (id == v.id) {
+                    ddlUsers.append(`<option selected='' value='${v.id}'>${v.userName}</option>`);
+                    return;
+                }
+                else
+                    ddlUsers.append(`<option value='${v.id}'>${v.userName}</option>`);
+            });
+
+        });
+    }
+    function LoadStations(districtId, id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.GetAction("LoadStaions")',
+            data: { DistrictId: districtId, stationId: IsEdit?id:null },
+            async: false,
+            dataType: "json",
+            success: function (res) {
+                ddlStations.children().remove();
+                $.each(res, function (k, v) {
+                    if (id == v.id) {
+                        ddlStations.append(`<option selected='' value='${v.id}'>${v.name}</option>`);
+                        return;
+                    }
+                    else
+                        ddlStations.append(`<option value='${v.id}'>${v.name}</option>`);
+                });
+                console.log({ ssss: MainStationId });
+                $('#StationId').val(MainStationId).trigger('change');
+
+            },
+            error: function () {
+            }
+        });
+
+    }
+
+
+
+    //#endregion
+
+    function SelectAllStation() {
+        var btnSelectAll = $('#btnSelectAll');
+        var SelectAll = btnSelectAll.attr('SelectAll')=='true';
+        $('#StationId option').attr('selected', SelectAll).parent().trigger('change');
+
+        btnSelectAll.attr('SelectAll', !SelectAll);
+        if (SelectAll == true) {
+            btnSelectAll.text( 'الغاء التحديد')
+
+        }
+        else {
+            btnSelectAll.text('تحديد الكل')
+
+        }
+    }
+     //#region Ajax
+    var MainRegionId = '', MainCityId = '', MainDistrictId = '', MainUserId = '', MainStationId='';
+
+    function LoadRegions(regionId='', cityId = '', districtId = '') {
+        MainRegionId = regionId;
+        MainCityId = cityId;
+        MainDistrictId = districtId;
+        var branchId = ddlBranches.val();
+        //if (branchId == '' || branchId == null) {
+
+
+        //    return;
+        //}
+        $.ajax({
+            type: "POST",
+            url: '@Url.GetAction("GetRegions")',
+            data: { branchId: branchId },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+                ddlRegions.children().remove();
+                res.map(p => {
+
+                    if (p.value == MainRegionId) {
+
+                        ddlRegions.append(`<option selected='' value='${p.value}'>${p.text}</option>`)
+                        return;
+                    }
+                    else {
+                        ddlRegions.append(`<option value='${p.value}'>${p.text}</option>`);
+                    }
+                });
+                if (MainRegionId != '') {
+                    console.log('rr  ' + MainRegionId);
+
+                    ddlRegions.val(MainRegionId).trigger('change');
+
+                }
+                else
+                    ddlRegions.trigger('change');            },
+            error: function () {
+            }
+        });
+
+    }
+    function LoadCities(cityId='',districtId='') {
+        var regionId = ddlRegions.val();
+        //if (regionId == '' || regionId == null) {
+        //    ddlDistricts.children().remove();
+
+        //    return;
+        //}
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.GetAction("GetCities")',
+            data: { regionId: regionId },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+                ddlCities.children().remove();
+                res.map(p => {
+                    if (p.value == MainCityId) {
+                        ddlCities.append(`<option selected='' value='${p.value}'>${p.text}</option>`)
+
+                        return;
+                    }
+                    else {
+
+                        ddlCities.append(`<option value='${p.value}'>${p.text}</option>`);
+                    }
+                });
+                if (MainCityId != '') {
+                    console.log('cc  ' + MainCityId);
+
+                    ddlCities.val(MainCityId).trigger('change');
+
+                    // LoadDitricts(districtId);
+                }
+                else {
+                    ddlCities.trigger('change');
+                    MainRegionId = regionId;
+                }
+                LoadUsers(MainRegionId, MainUserId);
+
+
+            },
+            error: function () {
+            }
+        });
+
+
+
+
+    }
+    function LoadDitricts(districtId='') {
+        var cityId = ddlCities.val();
+        //if (cityId == '' || cityId == null) {
+        //    return;
+        //}
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.GetAction("GetDistricts")',
+            data: { cityId: cityId },
+            dataType: "json",
+            async: false,
+            success: function (res) {
+                ddlDistricts.children().remove();
+                res.map(p => {
+                    if (p.value == districtId) {
+                        ddlDistricts.append(`<option selected='' value='${p.value}'>${p.text}</option>`)
+                        return;
+                    }
+
+                    ddlDistricts.append(`<option value='${p.value}'>${p.text}</option>`)
+                });
+
+                if (MainDistrictId != '') {
+                    console.log('dd  ' + MainDistrictId);
+
+                    ddlDistricts.val(MainDistrictId).trigger('change');
+                    LoadStations(MainDistrictId, MainStationId);
+
+                }
+                else {
+                    ddlDistricts.trigger('change');
+                }
+
+
+            },
+            error: function () {
+            }
+        });
+
+
+    }
+
+        //#endregion
+</script>

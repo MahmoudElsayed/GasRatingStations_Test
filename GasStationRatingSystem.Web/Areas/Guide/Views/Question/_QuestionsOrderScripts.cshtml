@@ -1,0 +1,42 @@
+﻿<script>
+        (function ($) {
+            "use strict"
+
+
+            var e = function (e) {
+                var t = e.length ? e : $(e.target),
+                    a = t.data("output");
+                window.JSON ? a.val(window.JSON.stringify(t.nestable("serialize"))) : a.val("JSON browser support required for this demo.")
+            };
+            $("#nestable").nestable({}).on('change', function (e) {
+                var arr = [];
+                $.each($("#nestable .dd-item-index"), function (key, value) { $(this).text(key + 1); arr.push(parseInt($(this).parent().parent().attr('data-order'))); })
+                arr.sort(function (a, b) { return a - b; });
+                $.each(arr, function (key, value) { $("#nestable .dd-item:eq(" + key + ")").attr('data-order', value); })
+
+            })
+        })(jQuery);
+        function SaveOrder() {
+            var DrillTypeDivs = $('.dd-item');
+            var arrOfDrillTypes = [];
+
+            DrillTypeDivs.each(function (key, value) {
+                value = $(value);
+
+                var id = value.attr('data-id');
+
+                var order = value.attr('data-order');
+                arrOfDrillTypes.push({ key: id, value: order });
+
+            })
+            $.post('@Url.GetAction("SaveOrder")', { DrillTypes: arrOfDrillTypes }, function (res) {
+                if (res.isSuccess) {
+                    alertify.success(res.message);
+                }
+                else {
+                    alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+                }
+            });
+        }
+
+</script>

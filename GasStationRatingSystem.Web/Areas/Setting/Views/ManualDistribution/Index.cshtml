@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+
+@model ManualDistributionDTO;
+<partial name="_Style" />
+<form id="frm" onsubmit="Submit()">
+
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6 p-md-0">
+            <div class="welcome-text">
+                <h4>@CurrentForm.Title   </h4>
+            </div>
+        </div>
+        @if (CurrentForm.CurrentFormPermissionActions.AddHasPermission || CurrentForm.CurrentFormPermissionActions.EditHasPermission)
+        {
+            <div class="col-sm-6 p-md-0 ">
+                <button class="btn btn-primary pull-left" id="btnSave" type="submit">حفظ</button>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <input type="hidden" id="txtId" asp-for="ID" value="@Guid.NewGuid()" />
+
+                    <div class="row">
+                       
+                        <div class="col-lg-3 col-md-3">
+                            <label>الفرع </label>
+                            <select onchange="LoadRegions('','','')" asp-items="ViewBag.Branches" id="ddlBranches" name="Branches" class="form-control select2">
+                                <option value="@Guid.Empty" hidden="">اختر</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <label>المنطقة </label>
+                            <select onchange="LoadCities()" id="ddlRegions" name="Regions" class="form-control select2">
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <label> المدينة </label>
+                            <select onchange="LoadDitricts()" id="ddlCities" name="Cities" class="form-control select2">
+                            </select>
+                        </div>
+
+
+
+                        <div class="col-lg-3 col-md-3">
+                            <label>الحي </label>
+                            <select id="ddlDistricts" onchange="LoadStations($(this).val())" class="form-control select2"></select>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <label>المستخدم </label>
+                            <select asp-for="UserId" class="form-control select2"></select>
+                            <span asp-validation-for="UserId"></span>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label> المحطة</label>
+                            <select multiple="" asp-for="StationId" name="StationId" class="form-control select2"></select>
+                            <span asp-validation-for="StationId"></span>
+                        </div>
+
+                    </div>
+                    <div class="">
+                        <button class="btn btn-info" style="margin-top: 9px!important;" type="button" SelectAll="true" id="btnSelectAll" onclick="SelectAllStation()">تحديد الكل</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+@if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+{
+
+
+<partial name="_DataTable" />
+}
+@section Scripts
+{
+
+    <partial name="_Scripts" />
+}

@@ -1,0 +1,282 @@
+﻿@model IEnumerable<AsideBarDTO>
+@inject GasStationRatingSystem.BLL.UserBll _userBll;
+@{ 
+    var userid = ViewContext.HttpContext.UserId();
+    string userName = string.Empty;
+}
+
+
+<div class="topnav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+            <div class="collapse navbar-collapse" id="topnav-menu-content" style="justify-content: space-between;">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="@Url.Action("Index","Home")" aria-expanded="false" id="topnav-dashboard" role="button">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <span data-key="t-dashboards">الرئيسية</span>
+                        </a>
+
+                    </li>
+
+
+                    @foreach (var item in Model)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                <i class="@item.IconName" aria-hidden="true"></i><span data-key="t-dashboards"> @item.AreaTitle </span>
+
+
+
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach (var pageItem in item.AsideBarPagesDTOs.Where(p => p.HasPermission))
+                                {
+                                    <a class="dropdown-item" href="/@pageItem.PageRoute">@pageItem.PageTitle</a>
+                                }
+                            </div>
+
+
+                        </li>
+                    }
+
+
+                    <li class="nav-item dropdown d-none d-sm-block d-md-none ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-user" aria-hidden="true"></i><span data-key="t-dashboards">
+    @{
+        if (userid != null && userid != Guid.Empty)
+        {
+            var user = _userBll.GetById(ViewContext.HttpContext.UserId());
+            if (user != null)
+            {
+                if (string.IsNullOrEmpty(user.InspectorName))
+                    userName = user.UserName;
+
+                else
+                    userName = user.InspectorName;
+
+
+            }
+
+        }
+
+    }
+
+    @userName
+</span>
+
+
+
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="@Url.GetAction("ChangePassword")"> Change Password</a>
+
+
+                            <a class="dropdown-item" href="~/Account/LogOff"> Logout</a>
+
+
+                        </div>
+
+
+                    </li>
+
+
+
+
+
+                </ul>
+                <div class="d-flex">
+
+                    <div class="dropdown  d-none ms-2">
+                        <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i data-feather="search" class="icon-lg"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+
+                            <form class="p-3">
+                                <div class="form-group m-0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    @*<div class="dropdown d-none d-sm-inline-block" style="display:none">
+                        <button type="button" class="btn header-item" id="mode-setting-btn">
+                            <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                            <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                        </button>
+                    </div>*@
+
+
+
+                    <div class="dropdown d-lg-inline-block d-none ">
+                        <button type="button" class="btn btn-lg-primary header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class=" ms-1 fw-medium">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+
+                                @{
+                                    if (userid != null && userid != Guid.Empty)
+                                    {
+                                        var user = _userBll.GetById(ViewContext.HttpContext.UserId());
+                                        if (user != null)
+                                        {
+                                            if (string.IsNullOrEmpty(user.InspectorName))
+                                                userName = user.UserName;
+
+                                            else
+                                                userName = user.InspectorName;
+
+
+                                        }
+
+                                    }
+
+                                }
+
+                                @userName
+                            </span>
+
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="@Url.GetAction("ChangePassword")"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Change Password</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="~/Account/LogOff"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div class="right-bar">
+    <div data-simplebar="" class="h-100">
+        <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+            <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+            <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                <i class="mdi mdi-close noti-icon"></i>
+            </a>
+        </div>
+
+        <!-- Settings -->
+        <hr class="m-0">
+
+        <div class="p-4">
+            <h6 class="mb-3">Layout</h6>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                <label class="form-check-label" for="layout-vertical">Vertical</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                <label class="form-check-label" for="layout-mode-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                <label class="form-check-label" for="layout-mode-dark">Dark</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                <label class="form-check-label" for="topbar-color-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                <label class="form-check-label" for="sidebar-size-default">Default</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Color</h6>
+
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                <label class="form-check-label" for="sidebar-color-light">Light</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+            </div>
+
+        </div>
+
+    </div> <!-- end slimscroll-menu-->
+</div>

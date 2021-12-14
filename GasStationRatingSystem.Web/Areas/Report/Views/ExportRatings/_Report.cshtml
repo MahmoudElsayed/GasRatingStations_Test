@@ -1,0 +1,6 @@
+﻿
+@model RatingsReportDTO;
+
+
+@(Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("1000px")
+.Bind(new VisitInfoXtraReport(Model)))

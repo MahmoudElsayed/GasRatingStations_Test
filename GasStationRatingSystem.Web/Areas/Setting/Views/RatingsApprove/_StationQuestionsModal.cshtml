@@ -1,0 +1,43 @@
+﻿<div id="Details-Modal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style=" width: 70vw; max-width:98vw">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button onclick="$('.modal').modal('hide')" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                   
+                    <label id="lblName"></label>
+                </h4>
+            </div>
+            <div class="modal-body" style="max-height: 70vh;overflow-y: auto;">
+
+             
+                <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>السؤال</th>
+                                    <th>الاجابة</th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyDetails">
+
+                                
+
+                            </tbody>
+
+                        </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="$('.modal').modal('hide')" type="button" class="btn btn-danger light" data-dismiss="modal">الغاء</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,509 @@
+﻿<!-- Resources -->
+<style>
+    .datexop {
+        border: 2px solid rgb(105,161,61);
+        border-radius: 5px;
+    }
+    .pie .card-body {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem 1.25rem;
+    }
+
+    .pie .card {
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid #e9e9ef;
+    }
+
+        .pie .card span {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+    #apexchartsjpyd1ar7 {
+        display: none
+    }
+
+
+    .apexchartszoyohvssh {
+        display: none !important
+    }
+
+    #main-wrapper > div.content-body > div > div.card > h2 {
+        padding: 2rem;
+        margin-right: 6px;
+        margin-bottom: 5rem;
+    }
+
+    .big .card .card {
+        margin-bottom: 1.875rem;
+        background-color: #fff;
+        transition: all .5s ease-in-out;
+        position: relative;
+        border: 1px solid #e7e7e7;
+        border-radius: 0.375rem;
+        box-shadow: 0px 0px 13px 0px rgb(82 63 105 / 5%);
+        height: calc(100% - 30px);
+        padding: 1rem;
+    }
+
+    #main-wrapper > div.content-body > div > div.card.big > div {
+        border: none
+    }
+
+    #main-wrapper > div.content-body > div > div.card > h2 {
+        margin-bottom: 2rem !important;
+    }
+
+    body[data-layout-mode=dark] #main-wrapper > div.content-body > div > div > div > div {
+        padding: 1rem
+    }
+
+    #main-wrapper > div.content-body > div > div > div > div {
+        padding: 1rem
+    }
+
+    .cardinfo * {
+        color: #fff !important
+    }
+
+    .cardinfo .card {
+        border-radius: 25px;
+    }
+
+    .cardinfo.info-1 .card {
+        background: rgb(105,161,61) !important;
+        background: radial-gradient(circle, rgba(105,161,61,1) 0%, rgba(108,164,62,1) 100%) !important;
+    }
+
+    .cardinfo.info-2 .card {
+        background: rgb(229,182,40) !important;
+        background: radial-gradient(circle, rgba(245,198,82,1) 0%,rgba(229,182,40,1) 100%) !important;
+    }
+
+    .cardinfo.info-3 .card {
+        background: rgb(229,107,40) !important;
+        background: radial-gradient(circle,rgba(231,133,88,1) 0%,rgba(229,107,40,1) 100%) !important;
+    }
+
+    .pie {
+        height: 140px
+    }
+
+    #branchespie {
+        height: 390px
+    }
+   
+        #branchesbar .dxc-chart{width:100%}
+</style>
+<script src="~/amcharts/core.js"></script>
+<script src="~/amcharts/charts.js"></script>
+<script src="~/amcharts/dark.js"></script>
+<script src="~/amcharts/animated.js"></script>
+
+<div class="row ">
+    <div class="col-xl-9 col-lg-9 col-md-12  mb-2">
+        <div class="card">
+
+            <div class="card-body p-0">
+                <div class=" top row">
+
+
+                    <!-- end card body -->
+                    <!--</div>--><!-- end card -->
+                    <!--</div>-->
+                    <div class="col-md-4 col-sm-6 cardinfo info-1">
+                        <!-- card -->
+                        <div class="card  mb-0" style="height:100% !important">
+                            <!-- card body -->
+                            <div class="card-body text-center">
+                                <h5 class=" mb-3 lh-1 d-block ">إجمالي عدد المحطات المستهدفة</h5>
+
+                                <div class="row align-items-center">
+                                    <div class="col-12">
+                                        <h1 id="hTotal" class="mb-2 " style="font-size: 3rem;"></h1>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h1 class="percentage">100%</h1>
+                                    </div>
+                                </div>
+                                <div class="text-nowrap">
+                                    @*<span class="badge bg-soft-success text-success">100</span>
+                                        <span class="ms-1 text-muted font-size-13 green">خلال اخر عشر ايام</span>*@
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div>
+                    <div class="col-md-4 col-sm-6 cardinfo info-2">
+                        <!-- card -->
+                        <div class="card  mb-0" style="height:100% !important">
+                            <!-- card body -->
+                            <div class="card-body text-center">
+                                <h5 class=" mb-3 lh-1 d-block ">إجمالي عدد المحطات التي تم تقيمها</h5>
+
+                                <div class="row align-items-center">
+                                    <div class="col-12">
+                                        <h1 id="hTotalEnded" class="mb-2 " style="font-size: 3rem;"></h1>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h1 class="percentageEnded" id="percentageEnded"></h1>
+                                    </div>
+                                </div>
+                                <div class="text-nowrap">
+                                    @*<span class="badge bg-soft-success text-success">100</span>
+                <span class="ms-1 text-muted font-size-13 green">خلال اخر عشر ايام</span>*@
+                                </div>
+                            </div><!-- end card body -->
+
+                        </div><!-- end card -->
+                    </div>
+                    <div class="col-md-4 col-sm-6 cardinfo info-3">
+                        <!-- card -->
+                        <div class="card mb-0" style="height:100% !important">
+                            <!-- card body -->
+                            <div class="card-body text-center">
+                                <h5 class=" mb-3 lh-1 d-block ">إجمالي عدد المحطات المتبقية</h5>
+
+                                <div class="row align-items-center">
+                                    <div class="col-12">
+                                        <h1 id="hTotalInRemaining" class="mb-3" style="font-size: 3rem;"></h1>
+                                        <h4 id="hNotStarted" style="display:none"> </h4>
+                                        <h4 id="hTotalInProgress" class="mb-3" style="display:none"></h4>
+
+                                    </div>
+
+                                    <div class="col-12">
+                                        <h1 class="percentageRemaining" id="percentageRemaining"></h1>
+                                    </div>
+                                </div>
+                                <div class="text-nowrap">
+                                    @*<span class="badge bg-soft-success text-success">100</span>
+                <span class="ms-1 text-muted font-size-13 green">خلال اخر عشر ايام</span>*@
+                                </div>
+                            </div><!-- end card body -->
+
+                     
+                        </div><!-- end card -->
+                    </div>
+
+
+
+
+                    <!-- end col -->
+                </div><!-- end row-->
+                <!-- end col -->
+                @*<div class="col-lg-3 col-md-6">
+                        <div class="pie-border">
+                            <div class="dash-icon">
+                                <span style="color:#4886F5" id="epdecCount">
+                                    اجمالي المحطات
+                                </span>
+                                <i class="fas fa-globe-europe" style="background:#4886F5"></i>
+                            </div>
+                            <h4 id="hTotal"></h4>
+                        </div>
+                    </div>*@
+
+
+
+                <!--<div class="col-xl-3 col-md-6">-->
+                <!-- card -->
+                <!--<div class="card card-h-100">-->
+                <!-- card body -->
+                <!--<div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <span class="text-muted mb-3 lh-1 d-block text-truncate" id="epdecCount">اجمالي المحطات</span>
+                            <h4 id="hTotal" class="mb-3"></h4>
+                        </div>
+
+                        <div class="col-6">
+                            <div id="mini-chart1" data-colors="[&quot;#5156be&quot;]" class="apex-charts mb-2" style="min-height: 50px;"><div id="apexchartsozgr47sb" class="apexcharts-canvas apexchartsozgr47sb apexcharts-theme-light" style="width: 114px; height: 50px;"><svg id="SvgjsSvg1001" width="114" height="50" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1003" class="apexcharts-inner apexcharts-graphical" transform="translate(0, 0)"><defs id="SvgjsDefs1002"><clipPath id="gridRectMaskozgr47sb"><rect id="SvgjsRect1009" width="120" height="52" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="gridRectMarkerMaskozgr47sb"><rect id="SvgjsRect1010" width="118" height="54" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><line id="SvgjsLine1008" x1="23.92857142857143" y1="0" x2="23.92857142857143" y2="50" stroke="#b6b6b6" stroke-dasharray="3" class="apexcharts-xcrosshairs" x="23.92857142857143" y="0" width="1" height="50" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1"></line><g id="SvgjsG1016" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1017" class="apexcharts-xaxis-texts-g" transform="translate(0, 2.75)"></g></g><g id="SvgjsG1034" class="apexcharts-grid"><g id="SvgjsG1035" class="apexcharts-gridlines-horizontal" style="display: none;"><line id="SvgjsLine1037" x1="0" y1="0" x2="114" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1038" x1="0" y1="12.5" x2="114" y2="12.5" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1039" x1="0" y1="25" x2="114" y2="25" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1040" x1="0" y1="37.5" x2="114" y2="37.5" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line><line id="SvgjsLine1041" x1="0" y1="50" x2="114" y2="50" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line></g><g id="SvgjsG1036" class="apexcharts-gridlines-vertical" style="display: none;"></g><line id="SvgjsLine1043" x1="0" y1="50" x2="114" y2="50" stroke="transparent" stroke-dasharray="0"></line><line id="SvgjsLine1042" x1="0" y1="1" x2="0" y2="50" stroke="transparent" stroke-dasharray="0"></line></g><g id="SvgjsG1011" class="apexcharts-line-series apexcharts-plot-series"><g id="SvgjsG1012" class="apexcharts-series" seriesName="seriesx1" data:longestSeries="true" rel="1" data:realIndex="0"><path id="SvgjsPath1015" d="M0 48.75C2.85 48.75 5.2928571428571445 43.75 8.142857142857144 43.75C10.992857142857144 43.75 13.435714285714289 38.75 16.28571428571429 38.75C19.135714285714286 38.75 21.57857142857143 36.25 24.42857142857143 36.25C27.278571428571432 36.25 29.721428571428575 27.5 32.57142857142858 27.5C35.42142857142858 27.5 37.864285714285714 40.625 40.714285714285715 40.625C43.56428571428572 40.625 46.00714285714286 20.625 48.85714285714286 20.625C51.70714285714286 20.625 54.15 3.125 57 3.125C59.85 3.125 62.29285714285715 9.375 65.14285714285715 9.375C67.99285714285715 9.375 70.4357142857143 38.125 73.28571428571429 38.125C76.13571428571429 38.125 78.57857142857144 41.25 81.42857142857143 41.25C84.27857142857142 41.25 86.72142857142858 48.75 89.57142857142857 48.75C92.42142857142858 48.75 94.86428571428571 20.625 97.71428571428572 20.625C100.56428571428572 20.625 103.00714285714287 23.75 105.85714285714286 23.75C108.70714285714286 23.75 111.15 40.625 114 40.625C114 40.625 114 40.625 114 40.625 " fill="none" fill-opacity="1" stroke="rgba(81,86,190,0.85)" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-line" index="0" clip-path="url(#gridRectMaskozgr47sb)" pathTo="M 0 48.75C 2.85 48.75 5.2928571428571445 43.75 8.142857142857144 43.75C 10.992857142857144 43.75 13.435714285714289 38.75 16.28571428571429 38.75C 19.135714285714286 38.75 21.57857142857143 36.25 24.42857142857143 36.25C 27.278571428571432 36.25 29.721428571428575 27.5 32.57142857142858 27.5C 35.42142857142858 27.5 37.864285714285714 40.625 40.714285714285715 40.625C 43.56428571428572 40.625 46.00714285714286 20.625 48.85714285714286 20.625C 51.70714285714286 20.625 54.15 3.125 57 3.125C 59.85 3.125 62.29285714285715 9.375 65.14285714285715 9.375C 67.99285714285715 9.375 70.4357142857143 38.125 73.28571428571429 38.125C 76.13571428571429 38.125 78.57857142857144 41.25 81.42857142857143 41.25C 84.27857142857142 41.25 86.72142857142858 48.75 89.57142857142857 48.75C 92.42142857142858 48.75 94.86428571428571 20.625 97.71428571428572 20.625C 100.56428571428572 20.625 103.00714285714287 23.75 105.85714285714286 23.75C 108.70714285714286 23.75 111.15 40.625 114 40.625" pathFrom="M -1 50L -1 50L 8.142857142857144 50L 16.28571428571429 50L 24.42857142857143 50L 32.57142857142858 50L 40.714285714285715 50L 48.85714285714286 50L 57 50L 65.14285714285715 50L 73.28571428571429 50L 81.42857142857143 50L 89.57142857142857 50L 97.71428571428572 50L 105.85714285714286 50L 114 50"></path><g id="SvgjsG1013" class="apexcharts-series-markers-wrap" data:realIndex="0"><g class="apexcharts-series-markers"><circle id="SvgjsCircle1049" r="0" cx="24.42857142857143" cy="36.25" class="apexcharts-marker wtofp3lwl no-pointer-events" stroke="#ffffff" fill="#5156be" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" default-marker-size="0"></circle></g></g></g><g id="SvgjsG1014" class="apexcharts-datalabels" data:realIndex="0"></g></g><line id="SvgjsLine1044" x1="0" y1="0" x2="114" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1045" x1="0" y1="0" x2="114" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG1046" class="apexcharts-yaxis-annotations"></g><g id="SvgjsG1047" class="apexcharts-xaxis-annotations"></g><g id="SvgjsG1048" class="apexcharts-point-annotations"></g></g><rect id="SvgjsRect1007" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect><g id="SvgjsG1033" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g><g id="SvgjsG1004" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend" style="max-height: 25px;"></div><div class="apexcharts-tooltip apexcharts-theme-light" style="left: 35.4286px; top: 15.4px;"><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(81, 86, 190); display: none;"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value">22</span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div><div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light"><div class="apexcharts-yaxistooltip-text"></div></div></div></div>
+                            <div class="resize-triggers"><div class="expand-trigger"><div style="width: 136px; height: 59px;"></div></div><div class="contract-trigger"></div></div>
+                        </div>
+                    </div>
+                    <div class="text-nowrap">
+                        <span class="badge bg-soft-success text-success">+$20.9k</span>
+                        <span class="ms-1 text-muted font-size-13">خلال اخر عشر ايام</span>
+                    </div>
+                </div>-->
+                @*<div class="col-lg-3 col-md-6">
+                        <div class="pie-border">
+                            <div class="dash-icon">
+                                <span style="color:#32D7ED" id="totalSales">
+                                    قيد التقييم
+                                </span>
+                                <i class="fas fa-exchange-alt" style="background:#32D7ED"></i>
+                            </div>
+                            <h4 id="hTotalInProgress"></h4>
+                        </div>
+                    </div>*@
+                @*<div class="col-lg-3 col-md-6">
+                        <div class="pie-border">
+                            <div class="dash-icon">
+                                <span style="color: #e74c3c" id="damadgeCount">
+                                    لم تُقيم
+                                </span>
+                                <i class="fas fa-times" style="background: #e74c3c"></i>
+                            </div>
+                            <h4 id="hNotStarted"> </h4>
+                        </div>
+                    </div>*@
+
+
+
+
+                @*<div class="col-lg-3 col-md-6">
+                        <div class="pie-border">
+                            <div class="dash-icon">
+                                <span style="color: #27ae60" id="totalReturn">
+                                    تم تقييمها
+                                </span>
+                                <i class="fas fa-check-circle" style="background: #27ae60"></i>
+                            </div>
+                            <h4 id="hTotalEnded"></h4>
+                        </div>
+                    </div>*@
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-3 col-md-12 mb-2">
+        <div class="card p-0">
+            <div class="card-header justify-content-center pr-0 px-0 pt-2 pb-2">
+                <h6 class="card-title font-size-14">تاريخ التقييم</h6>
+            </div>
+            <div class="card-body pr-1 px-1  pt-2 pb-2">
+                <div class="form-group mb-0">
+                    <label class="font-size-14 mt-0">من تاريخ </label>
+                    <input id="txtDateFrom" class="form-control datexop " type="text" name="FromData"  />
+                </div>
+                <div class="form-group mb-0">
+                    <label class="font-size-14 mt-0">الي تاريخ </label>
+                    <input id="txtDateTo" class="form-control datexop " type="text" name="ToData" />
+                </div>
+                <div class="form-group mb-0">
+                    <label class="font-size-14 mt-0"></label>
+                    <button class="btn btn-info mt-3 mb-2" type="button" onclick="ViewReports()" id="btnViewByDate" >عرض</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="row">
+    <div class="col-xl-9 col-lg-6 col-md-12  mb-2" id="divBranchesbar">
+
+
+    </div>
+    <div class="col-xl-9 col-lg-6 col-md-12  mb-2 d-none" id="divBranches">
+
+
+
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12 mb-2" >
+        <div class="card p-0">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">   نتائج تقييم المحطات </h4>
+            </div>
+            <div class="card-body px-2 pt-2 pb-2">
+                <table class="ratetable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="bg-1 text-white  text-center px-1 pt-2 pb-2  font-size-12">تأثير مهمل</th>
+                            <th class="bg-2 text-black  text-center px-1 pt-2 pb-2  font-size-12">تأثير محدود</th>
+                            <th class="bg-3 text-white  text-center px-1 pt-2 pb-2  font-size-12">تأثير متوسط</th>
+                            <th class="bg-4 text-white  text-center px-1 pt-2 pb-2  font-size-12">تأثير عالي</th>
+                            <th class="bg-5 text-white  text-center px-1 pt-2 pb-2  font-size-12">تأثير خطير</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-secondary  text-center  px-1 pt-2 pb-2 font-size-12 font-weight-bold">التأثير علي جودة التربة</td>
+                            <td class="bg-1 text-white  text-center pt-2 pb-2  font-size-14 " style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-2 text-black  text-center pt-2 pb-2  font-size-14" style="color: #79CAC4 !important;">0</td>
+                            <td class="bg-3 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-4 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-5 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary  text-center  px-1 pt-2 pb-2 font-size-12 font-weight-bold">التأثير علي جودة الهواء</td>
+                            <td class="bg-1 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-2 text-black  text-center pt-2 pb-2  font-size-14" style="color: #79CAC4 !important;">0</td>
+                            <td class="bg-3 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-4 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-5 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary  text-center  px-1 pt-2 pb-2 font-size-12 font-weight-bold">التأثير علي جودة المياة الجوفية</td>
+                            <td class="bg-1 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-2 text-black  text-center pt-2 pb-2  font-size-14" style="color: #79CAC4 !important;">0</td>
+                            <td class="bg-3 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-4 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-5 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary  text-center  px-1 pt-2 pb-2 font-size-12 font-weight-bold">التأثير علي المجتمع</td>
+                            <td class="bg-1 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-2 text-black  text-center pt-2 pb-2  font-size-14" style="color: #79CAC4 !important;">0</td>
+                            <td class="bg-3 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-4 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-5 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-secondary  text-center  px-1 pt-2 pb-2 font-size-12 font-weight-bold">التأثير علي العاملين</td>
+                            <td class="bg-1 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-2 text-black  text-center pt-2 pb-2  font-size-14" style="color: #79CAC4 !important;">0</td>
+                            <td class="bg-3 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-4 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                            <td class="bg-5 text-white  text-center pt-2 pb-2  font-size-14" style="color: #DDECF3 !important;">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="text-secondary text-center mt-2">عدد المحطات التي تؤثر علي الأوساط البيئية</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="row  " id="divCities">
+
+            @*<div class="col-md-4 ">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">منطقة المدينة المنورة</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie2" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">منطقة الرياض</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie3" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">المنطقة الشرقية</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie4" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">المنطقة الشمالية</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie5" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">المنطقة الجنوبية</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie6" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>*@
+
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row" id="divDashboardCharts">
+            @*<div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header justify-content-center pr-0 px-0">
+                            <h6 class="card-title font-size-14">منطقة جازان</h6>
+                        </div>
+                        <div class="card-body pr-1 px-1  pt-2 pb-2">
+                            <div class="dx-viewport demo-container">
+                                <div id="pie7" class="pie"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>*@
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- HTML -->
+@*<div class="card" style="padding:20px">
+
+        <div class="row" id="divCities">
+
+
+
+
+
+        </div>
+    </div>*@
+
+@*<div class="card  big">
+    <h2 style="padding: 2rem;">
+    </h2>
+    <div class="card">
+
+        <div class="row" id="divDashboardCharts">
+
+        </div>
+    </div>
+</div>*@
+
+
+@*<div class="card  big">
+    <h2 style="padding: 2rem;">
+        الوضع الميداني
+    </h2>
+    <div class="card">
+
+        <div class="row" id="divCities">
+
+       
+        </div>
+    </div>
+</div>*@

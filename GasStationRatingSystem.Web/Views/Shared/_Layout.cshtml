@@ -1,0 +1,547 @@
+﻿@{
+    var IsRtl = true;
+}
+@inject GasStationRatingSystem.BLL.PageBll _pageBll;
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+        @{ 
+            string pageName = Url.ActionContext.RouteData.Values["controller"].ToString();
+            if (Url.ActionContext.RouteData.Values["action"].ToString() == "ChangePassword")
+            {
+                pageName =( Url.ActionContext.RouteData.Values["action"].ToString());
+            }
+            
+                
+
+            pageName = "تقييم محطات الوقود - " + _pageBll.GetPageName(pageName);
+
+
+                    }  
+
+        @pageName
+    </title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="/image/png" asp-append-version="true" sizes="16x16" href="@Url.Content("~/images/vicon.png")" />
+
+    <!--#region Styles-->
+
+    <link href="@Url.Content("~/vendor/jqvmap/css/jqvmap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/vendor/chartist/css/chartist.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/vendor/bootstrap-select/dist/css/bootstrap-select.min.css")" rel="stylesheet" />
+
+
+    <link href="@Url.Content("~/vendor/datatables/css/jquery.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/vendor/datatables/css/responsive.dataTables.min.css")" rel="stylesheet" />
+
+
+    <link href="https://cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet">
+    <link href="@Url.Content("~/vendor/pickadate/themes/default.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/vendor/pickadate/themes/default.date.css")" rel="stylesheet" />
+
+    <!--    for this page only-->
+    <link href="@Url.Content("~/vendor/nestable2/css/jquery.nestable.min.css")" rel="stylesheet">
+
+    <link href="@Url.Content("~/vendor/lightbox/ekko-lightbox.css")" rel="stylesheet" />
+
+    <link href="@Url.Content("~/vendor/select2/css/select2.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/fontawesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/all.min.css")" rel="stylesheet" /> 
+    <link href="@Url.Content("~/css/bootstrap-rtl.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css")" rel="stylesheet" />
+
+
+    <link href="~/css/preloader.min.css" rel="stylesheet" />
+    <link href="~/css/jquery-jvectormap-1.2.2.css" rel="stylesheet" />
+    <link href="~/css/app-rtl.min.css" rel="stylesheet" />
+    <link href="~/vendor/table/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/vendor/table/css/preloader.min.css" rel="stylesheet" />
+    <link href="~/vendor/table/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+
+    <style>
+
+        .dataTables_filter input {
+                        display: none
+                    }
+
+        .btn-help {
+            margin: 0 4px;
+            border: none;
+            background: transparent;
+            padding: 0 !important;
+        }
+
+        .select2-container--default[dir="rtl"] .select2-selection--multiple .select2-selection__choice {
+            display: inline;
+            width: unset;
+            background: #0f0f0f;
+            color:black !important;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #5897fb !important;
+            color: white;
+        }
+        .ajs-header{
+            color:black;
+        }
+        .select2-container--default .select2-search--inline .select2-search__field {
+            color: black !important;
+        }
+            
+    </style>
+    @if (IsRtl)
+    {
+        <link href="@Url.Content("~/lib/alertfiy/alertify.rtl.min.css")" rel="stylesheet" />
+        <style>
+            .btn-help {
+                transform: rotateY(180deg);
+                }
+        </style>
+    }
+    else
+            {
+        <link href="@Url.Content("~/lib/alertfiy/alertify.min.css")" rel="stylesheet" />
+    }
+    <link href="@Url.Content("~/css/style.css?ver=1")" rel="stylesheet">
+    <style>
+        .select2-selection__clear {
+            display: none !important;
+            }
+
+        .app-accord {
+                text-align: right;
+            }
+
+            .app-accord .fa {
+                margin-right: 4px;
+                margin-left: 4px;
+            }
+        .ajs-content{color:black;}
+    </style>
+
+    <link href="@Url.Content("~/dropzone/dropzone.css")" rel="stylesheet" />
+
+    <!--
+            #endregion Styles-->
+
+    @RenderSection("Styles", false)
+    <script>
+        /**
+         * App Direction a global variable to entire application has rtl or ltr only
+         * */
+        let mainAppDirection = '@(ViewContext.HttpContext.IsRtl() ? "rtl" : "ltr")',
+            mainAppUserId = '@ViewContext.HttpContext.UserId()'
+    </script>
+
+</head>
+
+<body dir="@(ViewContext.HttpContext.IsRtl() ? "rtl" : "ltr")" lang="@ViewContext.HttpContext.LanguageCode()">
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <partial name="_Header" />
+
+        <vc:aside-bar></vc:aside-bar>
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+
+        <!--**********************************
+            Content body end
+        ***********************************-->
+        <!--#region Footer-->
+        @*<div class="footer">
+            <div class="copyright" style="text-align: center;">
+                COPYRIGHT @AppDateTime.Now.Year. ALL RIGHTS RESERVED.© BY <a href="http://www.mtx-it.com/" target="_blank" style="        color: #34C38F !important;">Creative Matrix</a>
+            </div>
+        </div>*@
+        <!--#endregion Footer-->
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+    <!--#region loader-->
+    <div id="ajax-loader" style=" position: fixed;
+        left: 45%;
+        top: 180px;
+        width: 100px;
+        height: 100px;
+            z-index: 3000;
+        display: none;
+        transition: all 0.5s ease 0s">
+        <img src="@Url.Content("~/images/1.gif")" class="img-fluid" />
+    </div>
+    <!--
+            #endregion loader-->
+    <!--
+            #region Scripts-->
+    @*<script>
+            // Auto Log Out
+            let appSessionTimeOutInMilliSeconds = @AppConstants.AppSessionTimeOutInMilliSeconds;
+
+            let f = 0;
+
+            function reloadSession() {
+                if (f != 0) { clearTimeout(f); }
+                f = setTimeout(function () {
+                    window.location.href = '/Authentication/Account/LogOff?returnUrl=@ViewContext.HttpContext.Request.PathBase.Value';
+                }, appSessionTimeOutInMilliSeconds);
+            }
+
+            reloadSession();
+
+            window.onmouseover = function () {
+                reloadSession();
+            }
+            window.onkeyup = function () {
+                reloadSession();
+            }
+
+        </script>*@
+    <script>
+        let _dataTableNextText = 'التالي',
+            _dataTablePrevText = 'السابق',
+            _dataTableShowText = 'عرض',
+            _dataTableFromText = 'من',
+            _dataTableRowsText = 'بيانات',
+            _dataTableSearchText = '',
+            _dataTableToText = 'الى',
+            _dataTableNoDataText = 'لا يوجد بيانات',
+            _dataTableLoadingText = 'انتظر';
+    </script>
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.js")"></script>
+
+
+
+    <script src="@Url.Content("~/vendor/global/global.min.js")"></script>
+    <script src="@Url.Content("~/vendor/bootstrap-select/dist/js/bootstrap-select.min.js")"></script>
+    <script src="@Url.Content("~/vendor/chart.js/Chart.bundle.min.js")"></script>
+    <script src="@Url.Content("~/js/custom.min.js")"></script>
+    <script src="@Url.Content("~/lib/alertfiy/alertify.min.js")"></script>
+    <script src="@Url.Content("~/vendor/select2/js/select2.full.min.js?ver=1")"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>*@
+    <!-- Apex Chart -->
+    <script src="@Url.Content("~/vendor/apexchart/apexchart.js")"></script>
+    <!-- Vectormap -->
+    <!-- Chart piety plugin files -->
+    <script src="@Url.Content("~/vendor/peity/jquery.peity.min.js")"></script>
+    <!-- Chartist -->
+    <script src="@Url.Content("~/vendor/chartist/js/chartist.min.js")"></script>
+    <!-- Svganimation scripts -->
+    <script src="@Url.Content("~/vendor/svganimation/vivus.min.js")"></script>
+    <script src="@Url.Content("~/vendor/svganimation/svg.animation.js")"></script>
+
+
+    <script src="@Url.Content("~/vendor/datatables/js/jquery.dataTables.min.js?ver=1.5")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/dataTables.responsive.min.js?ver=1.5")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/dataTables.buttons.min.js")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/buttons.flash.min.js")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/jszip.min.js")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/pdfmake.min.js")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/vfs_fonts.js")"></script>
+
+    <script src="@Url.Content("~/vendor/datatables/js/buttons.html5.min.js")"></script>
+    <script src="@Url.Content("~/vendor/datatables/js/buttons.print.min.js")"></script>
+
+
+    <script src="@Url.Content("~/vendor/pickadate/picker.js")"></script>
+    <script src="@Url.Content("~/vendor/pickadate/picker.time.js")"></script>
+    <script src="@Url.Content("~/vendor/pickadate/picker.date.js")"></script>
+    <script src="@Url.Content("~/vendor/lightbox/ekko-lightbox.min.js")"></script>
+
+
+    <script src="@Url.Content("~/vendor/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/vendor/metismenu/metisMenu.min.js")"></script>
+    <script src="@Url.Content("~/vendor/simplebar/simplebar.min.js")"></script>
+    <script src="@Url.Content("~/vendor/node-waves/waves.min.js")"></script>
+    <script src="@Url.Content("~/vendor/pace/pace.min.js")"></script>
+    <script src="@Url.Content("~/vendor/apexchart/apexchart.js")"></script>
+    @*<script src="@Url.Content("~/vendor/pages/dashboard.init.js")"></script>*@
+    @*<script src="~/vendor/table/js/responsive.bootstrap4.min.js"></script>*@
+    <script src="~/vendor/table/js/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/table/js/flatpickr.min.js"></script>
+    <script src="~/vendor/table/js/feather.min.js"></script>
+    @*<script src="~/vendor/table/js/dataTables.responsive.min.js"></script>*@
+    <script src="~/vendor/table/js/bootstrap.bundle.min.js"></script>
+    @*<script src="@Url.Content("~/vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-il-chicago-mill-en.js")"></script>*@
+    <script src="@Url.Content("~/vendor/app.js")"></script>
+
+    <link href="~/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" />
+    @*<script src="~/vendor/app.js"></script>*@
+    <script src="~/vendor/site.js"></script>
+    <!--#region start Jquery - unobtrusive - validate - ajax -->
+
+
+    <script src="@Url.Content("~/lib/jquery-validation/dist/jquery.validate.min.js")"></script>
+
+    <script src="@Url.Content("~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")"></script>
+
+    <script src="@Url.Content("~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js")"></script>
+
+    <!--#endregion end Jquery - unobtrusive - validate - ajax -->
+
+    <script asp-append-version="true" src="@Url.Content("~/js/main.js")"></script>
+
+    <script src="@Url.Content("~/dropzone/dropzone.js")"></script>
+
+    @RenderSection("Scripts", false)
+
+
+
+
+    <script>
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+
+
+        $(document).ajaxStart(() => {
+            let itm = $('#ajax-loader').css('top', '-110px');
+            itm.fadeIn(100, function () {
+                for (var i = -110; i < 180; i++) {
+                    itm.css('top', i + 'px');
+                }
+                setTimeout(function () {
+                    for (var i = 180; i > 150; i--) {
+                        itm.css('top', i + 'px');
+                    }
+                    setTimeout(function () {
+                        for (var i = 150; i < 180; i++) {
+                            itm.css('top', i + 'px');
+                        }
+                    }, 350);
+                }, 450);
+
+            });
+        });
+
+        $(document).ajaxStop(() => {
+            $('#ajax-loader').fadeOut();
+        });
+
+        function GetShortDate() {
+
+            var today = new Date();
+            var dd = today.getDate();
+
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            today = mm + '-' + dd + '-' + yyyy;
+            console.log(today);
+            today = mm + '/' + dd + '/' + yyyy;
+            console.log(today);
+            today = dd + '-' + mm + '-' + yyyy;
+            console.log(today);
+            today = mm + '/' + dd + '/' + yyyy;
+            return today;
+
+        }
+
+        $('.app-accord').click(function () {
+            let itm = $($(this).children()[0]);
+            if (itm.hasClass('fa-plus')) {
+                itm.removeClass('fa-plus').addClass('fa-minus');
+            } else {
+                itm.removeClass('fa-minus').addClass('fa-plus');
+            }
+        });
+
+        function newMapLayout() {
+            var mapimg = document.getElementsByClassName("show-map")[0];
+
+            var intrvl = setInterval(() => {
+                var gglmsg = mapimg.querySelector(
+                    `[src="https://maps.gstatic.com/mapfiles/api-3/images/google_gray.svg"]`
+                );
+                var imgs = mapimg.querySelectorAll("img[draggable][role]");
+                if (gglmsg != null) {
+                    gglmsg.parentNode.parentNode.remove();
+                }
+                imgs.forEach(e => {
+                    var src1 = e.src;
+                    src2 = src1.replace("2m3!1e2!6m1!3e5!3m17", "3m12");
+                    e.src = src2;
+                });
+            }, 0);
+        }
+        //$(document).ready(function () {
+
+        //    if ($(".dataTables_wrapper")) {
+        //        if ($(".dataTables_wrapper .buttonopensearch").length == 0) {
+        //            $(".dataTables_wrapper .dataTables_filter label").prepend('<button type="button" class="btn btn-primary buttonopensearch"><i class="fa fa-search" aria-hidden="true"></i></button>');
+        //        }
+        //    }
+        //    $(".dataTables_wrapper").on("click", ".buttonopensearch", function () {
+        //        $(this).siblings("input").animate({ width: 'toggle' }, 250);
+
+        //    })
+        //})
+    </script>
+    <style>
+        @@media (max-width: 576px) {
+            .dataTables_wrapper input[type=search] {
+                width: 100px;
+                height: 38px;
+            }
+
+            .modal-backdrop {
+                display: none;
+            }
+
+            .page-titles h4 {
+                padding-bottom: 27px !important;
+            }
+        }
+
+        table tfoot {
+            display: none;
+        }
+    </style>
+    <script>
+        //$(".dataTables_wrapper .dataTable").addClass("responsive");
+
+        $(document).ready(function () {
+            $(".nav-control").on('click', function () {
+
+                $('#main-wrapper').toggleClass("menu-toggle");
+
+                $(".hamburger").toggleClass("is-active");
+            });
+        })
+        $(document).ready(function () {
+            //$(".dataTables_wrapper .dataTable").addClass("responsive");
+            $("div.dataTables_length select").val($("div.dataTables_length select option:first-child").attr("value"));
+            $('div.dataTables_length select').selectpicker();
+
+            $('select.selectpicker').selectpicker();
+
+        })
+        $(document).ready(function () {
+            alertify.defaults.transition = "slide";
+            alertify.defaults.theme.ok = "btn btn-primary";
+            alertify.defaults.theme.cancel = "btn btn-danger";
+            alertify.defaults.theme.input = "form-control";
+
+
+        });
+        jQuery('.dz-fullscreen').on('click', function (e) {
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) { /* Enter fullscreen */
+                jQuery('.dz-fullscreen').toggleClass('active');
+
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen(); /* IE/Edge */
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen(); /* Firefox */
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen(); /* Chrome, Safari & Opera */
+                }
+            } else { /* exit fullscreen */
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+            }
+
+
+        });
+        $(".datexop").pickadate({
+            format: 'yyyy-mm-dd',
+            monthsFull: ['يناير', 'فبراير', 'مارس', 'ابريل', 'مايو', 'يونية', 'يوليو', 'اغسطس', 'سبتمبر', 'اكتوبر', 'نوفمبر', 'ديسمبر'],
+            weekdaysShort: ['الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+
+            // Buttons
+            today: 'اليوم',
+            clear: 'مسح',
+            close: 'غلق',
+
+            // Accessibility labels
+            labelMonthNext: 'الشهر التالي',
+            labelMonthPrev: 'الشهر السابق',
+            labelMonthSelect: 'اختر شهر',
+            labelYearSelect: 'اختر عام',
+        });
+        $(document).ready(function () {
+            $(document).on("click", ".dropdown-toggle", function () {
+                $(this).toggleClass("show");
+                $(this).siblings(".dropdown-menu").toggleClass("show");
+            })
+        });
+        $(document).ready(function () {
+            $(document).on("click", ".bg-soft-light", function () {
+                $(this).toggleClass("show");
+                $(this).siblings(".dropdown-menu").toggleClass("show");
+            });
+        });
+        function showmenu() {
+            var x = document.getElementById('topnav-menu-content');
+            if (x.style.display == 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    </script>
+    <!--#endregion Scripts-->
+
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+﻿<script>
+    let ddlUserType = $('#ddlUserType');
+    //$(document).ready(function () {
+
+    //});
+
+    function ShowUserPermission() {
+
+        if (ddlUserType.val() == undefined || ddlUserType.val() == '@Guid.Empty') {
+            $('#tbodyUserPermissions').children().remove();
+            return;
+        }
+
+        $.post('@Url.GetAction("ShowUserPermission")', { userTypeId: ddlUserType.val()} , function (res) {
+
+            $('#tbodyUserPermissions').html('');
+
+            $('#tbodyUserPermissions').html(res);
+
+
+
+        });
+
+
+    }
+
+    function SaveUserPermission() {
+        if (ddlUserType.val() == undefined || ddlUserType.val() == '@Guid.Empty') {
+            alertify.alert('@AppConstants.Messages.UserTypeRequiredMessage').setHeader('@AppConstants.Messages.StopTitle');
+
+            return;
+        }
+
+        var ArrayOfObj = [];
+        $.each($('#tbodyUserPermissions').children(), function (key, value) {
+            var tr = $(value);
+            var Permissions = tr.find('.Permission');
+            $.each(Permissions, function (k, v) {
+                var obj = new Object();
+                var check = $(v);
+                var PageId = tr.find('[name=PageId]').val();
+                var HasPermission = check.prop('checked');
+
+                obj.PageId = PageId;
+                obj.HasPermission = HasPermission;
+                obj.ActionName = check.attr('name');
+
+                ArrayOfObj.push(obj);
+            });
+
+
+        });
+
+        $.post('@Url.GetAction("SaveUserPermission")', { userTypeId: ddlUserType.val(), mdl: ArrayOfObj }, function (res) {
+
+
+            if (res.status) {
+                alertify.success(res.message);
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+        });
+
+
+    }
+
+    function CheckUnCheckAll(elem) {
+        $(elem).closest('tr').find('input[type=checkbox]').prop('checked', $(elem).prop('checked'));
+    }
+</script>

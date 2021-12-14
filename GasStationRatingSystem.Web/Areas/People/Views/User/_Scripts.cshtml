@@ -1,0 +1,451 @@
+﻿<script>
+
+    let form = $('#frm');
+    function Submit() {
+
+        event.preventDefault();
+
+        var valid = form.valid();
+        if (valid) {
+            Save();
+        }
+    }
+    function Save() {
+
+        $.post('@Url.GetAction("Save")', form.serialize() , function (res) {
+
+            if (res.status) {
+                alertify.success(res.message);
+                form[0].reset();
+                $('#tbl').DataTable().ajax.reload();
+                $('#txtId').val('');
+                $('#RegionIds').val('').trigger('change');
+
+            }
+            else {
+                alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+            }
+
+
+
+
+        });
+
+    }
+    function LoadTable() {
+        $('#tbl').DataTable().destroy();
+            dt = $('#tbl').DataTable({ "columnDefs": [{ "defaultContent": "-", "targets": "_all" }],
+
+                pageLength: 20,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [ 10, 25, 50, 75, 100 ],
+                sAjaxSource: '@Url.GetAction("LoadDataTable")',
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                dom: 'Blfrtip',
+                buttons: [
+
+
+                ],
+                columns: [
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row, meta) {
+                            return '<input type="hidden" name="' + data.userName+'" value="'+data.id+'"><label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+
+                    },
+
+
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label name="UserName">' + (data.userName ?? "") + '</label>' }
+
+                    },
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label name="InspectorName">' + (data.inspectorName ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label name="Email">' + (data.email ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label name="RegionIds" RegionIds="' + data.regionIdAsString + '"></label>'+'<label name="UserTypeId" UserTypeId="' + data.userTypeId + '">' + (data.userTypeName ?? "") + '</label>' }
+
+                    },
+                    //{
+                    //    data: null,
+                    //    bSortable: true,
+                    //    render: function (data, type, row) { return '<label name="RegionIds" RegionIds="' + data.regionIdAsString + '">' + (data.regionNames ?? "") + '</label>' }
+
+                    //},
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) { return '<label>' + (data.addedDate ?? "") + '</label>' }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: false,
+                        render: function (data, type, row) {
+
+                            var disabled = 'disabled';
+                            @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission)
+                                        {
+                                @:disabled = '';
+                                        }
+
+                            return ` <label class="switch">
+                                <input ${disabled} onchange='ChangeStatus(this);' name="IsActive"  type="checkbox" ${data.isActive ? 'checked' : ''}>
+                                <span class="slider round"></span>
+                            </label>` }
+
+                    },
+
+
+                    {
+
+                        data: null,
+                        bSortable: false,
+                        render: function (data, type, row) {
+                              let btn = `<div class="dropdown">
+        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-h"></i>  </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+`;
+                            btn += `
+
+
+                                                                  @if (CurrentForm.CurrentFormPermissionActions.EditHasPermission) {
+                                                                    <li><a class="dropdown-item" href="javascript:void(0)"  onclick="Edit(this)">تعديل</a></li>
+                                                                    <li><a class="dropdown-item" href="javascript:void(0)"  onclick="ResetPassword(this)">استعادة كلمة المرور الافتراضية</a></li>
+
+                                                                  }
+                                                                   @if (CurrentForm.CurrentFormPermissionActions.DeleteHasPermission) {
+                                                                  <li><a class="dropdown-item" href="javascript:void(0)" onclick="Delete(this)" href="javascript:void(0)" >حذف</a></li>
+                                                                  }
+
+
+                                                           `;
+
+
+
+                            return btn +'</ul></div>';
+
+                        }
+                    }
+                ]
+            });
+
+        }
+
+    function ShowUserPermissionModal(e) {
+        var btn = $(e);
+
+        var input = $(btn.closest('tr')).find('input[type=hidden]');
+        var id = input.val();
+        var name = input.attr('name');
+        $.post('@Url.GetAction("ShowUserPermission")', {id:id} , function (res) {
+
+            $('#tbodyUserPermissions').html('');
+
+            $('#tbodyUserPermissions').html(res);
+            $('#UserPermissions-Modal').modal();
+            $('#tbodyUserPermissions').attr('userId', id);
+            $('.lblName').html(name);
+
+
+
+        });
+
+
+    }
+
+        function ShowUserClientModal(e) {
+        var btn = $(e);
+            var input = $(btn.closest('tr')).find('input[type=hidden]');
+            var id = input.val();
+            var name = input.attr('name');
+
+        $.post('@Url.GetAction("ShowUserClient")', {id:id} , function (res) {
+
+            $('#ddlUserClients').html('');
+
+            $('#ddlUserClients').html(res);
+            $('#UserClients-Modal').modal();
+            $('#ddlUserClients').attr('userId', id);
+            $('.lblName').html(name);
+
+
+
+        });
+
+
+    }
+
+
+
+    function SaveUserPermission() {
+
+
+            var ArrayOfObj = [];
+        $.each($('#tbodyUserPermissions').children(), function (key, value) {
+            var tr = $(value);
+            var Permissions = tr.find('.Permission');
+            $.each(Permissions, function (k, v) {
+                var obj = new Object();
+                var check = $(v);
+                var PageId = tr.find('[name=PageId]').val();
+                var HasPermission = check.prop('checked');
+
+                obj.PageId = PageId;
+                obj.HasPermission = HasPermission;
+                obj.ActionName = check.attr('name');
+
+                ArrayOfObj.push(obj);
+            });
+
+
+        });
+        console.log(ArrayOfObj);
+
+            $.post('@Url.GetAction("SaveUserPermission")', { userId: $('#tbodyUserPermissions').attr('userId'), mdl: ArrayOfObj }, function (res) {
+
+
+                if (res.status) {
+                    alertify.success(res.message);
+                }
+                else {
+                    alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+                }
+
+
+
+            });
+
+
+    }
+
+        function SaveUserClient() {
+
+
+            let ArrayOfObj = [];
+            $.each($('#ddlUserClients').children(), function (key, value) {
+                let obj = new Object();
+
+                let ClientId = $(value).val();
+                let UserId = $('#ddlUserClients').attr('userid')
+                let ClientChecked = $(value).prop('selected');
+
+                obj.ClientId = ClientId;
+                obj.UserId = UserId;
+                obj.ClientChecked = ClientChecked;
+                ArrayOfObj.push(obj);
+            });
+          //  console.log(ArrayOfObj);
+            let frm = new FormData();
+            frm.append('userId', $('#ddlUserClients').attr('userId'));
+            frm.append('mdl', JSON.stringify(ArrayOfObj));
+
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.GetAction("SaveUserClient")',
+                data: frm,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function (res) {
+                    if (res.status) {
+                        alertify.success(res.message);
+                    }
+                    else {
+                        alertify.alert(res.message).setHeader('@AppConstants.Messages.StopTitle');
+
+                    }
+                },
+                failure: function (response) {
+                },
+                error: function (response) {
+                }
+            });
+
+
+
+    }
+
+
+  //#region Delete
+
+    function Delete(e) {
+        alertify.confirm().setting('modal', false);
+
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            $.post('@Url.GetAction("Delete")', {id:id}, function (res) {
+
+                 if (res.status) {
+                     alertify.success(res.message);
+                     btn.closest('tr').remove();
+
+
+                }
+                else {
+                    alertify.alert(res.message).setHeader('توقف');
+
+                }
+
+
+
+
+            });
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+    }
+        //#endregion
+    function Edit(e) {
+        var btn = $(e);
+
+        console.log({ btn: btn });
+        var tr = $(btn.closest('tr'));
+        var id = tr.find('input[type=hidden]').val();
+        console.log({ tr: tr });
+
+        var UserName = tr.find('label[name=UserName]').text();
+        var Email = tr.find('label[name=Email]').text();
+        var IsActive = tr.find('input[name=IsActive]').prop('checked');
+        var RegionIds = tr.find('label[name=RegionIds]').attr('RegionIds');
+        var UserTypeId = tr.find('label[name=UserTypeId]').attr('UserTypeId');
+        var InspectorName = tr.find('label[name=InspectorName]').text();
+
+        console.log(IsActive);
+        $('#txtUserName').val(UserName);
+        $('#txtEmail').val(Email);
+        $('#chkIsActive').prop('checked', IsActive);
+        $('#RegionIds').val(RegionIds).trigger('change');
+        $('#UserTypeId').val(UserTypeId).trigger('change');
+        $('#txtInspectorName').val(InspectorName);
+
+        var RegionIdsSelectedValues = RegionIds.toLowerCase().split(',');
+
+
+
+        $("#RegionIds").val(RegionIdsSelectedValues).trigger('change');
+
+
+
+        //$.each($('#RegionIds').children(), function () {
+        //    $(this).select2('val', selectedValues);
+        //});
+        console.log(UserName, Email, RegionIdsSelectedValues, UserTypeId);
+
+        $('#txtId').val(id);
+
+        window.scrollTo(0, 0);
+
+    }
+
+    function ChangeStatus(e) {
+          alertify.confirm().setting('modal', false);
+
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            $.post('@Url.GetAction("ChangeStatus")', {id:id}, function (res) {
+
+                 if (res.status) {
+                     alertify.success(res.message);
+
+
+                }
+                else {
+                    alertify.alert(res.message).setHeader('توقف');
+
+                }
+
+
+
+
+            });
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+    }
+        function ResetPassword(e) {
+          alertify.confirm().setting('modal', false);
+
+        var btn = $(e);
+        var id = $(btn.closest('tr')).find('input[type=hidden]').val();
+        alertify.confirm('هل انت متاكد من اجراء العملية', '', function () {
+
+            $.post('@Url.GetAction("ResetPassword")', {id:id}, function (res) {
+
+                 if (res.status) {
+                     alertify.success(res.message);
+
+
+                }
+                else {
+                    alertify.alert(res.message).setHeader('توقف');
+
+                }
+
+
+
+
+            });
+
+        },
+
+            function () { }
+        ).set('labels', { ok: 'نعم', cancel: 'لا' });
+    }
+
+
+
+    function CheckAll(elem) {
+        var checked = $(elem).prop('checked');
+        var name = $(elem).attr('name');
+        $(`input[name=${name}]`).prop('checked', checked);
+
+    }
+    $(document).ready(function () {
+        @if (CurrentForm.CurrentFormPermissionActions.ShowHasPermission)
+            {
+
+             @:   LoadTable();
+            }
+        });
+
+
+
+</script>

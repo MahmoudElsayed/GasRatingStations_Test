@@ -1,0 +1,136 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>a61ba9bb-7d4a-4e05-b873-0714fea4d6b0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Reports\VisitAnswerOptionXtraReport.repx" />
+    <None Remove="Reports\VisitInfoXtraReport.repx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\VisitAnswerOptionXtraReport.repx" />
+    <EmbeddedResource Include="Reports\VisitInfoXtraReport.repx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="wwwroot\lib\datatables.net-bs4\js\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\jquery-jvectormap-1.2.2.min.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-au-mill-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-ca-lcc-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-in-mill-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-uk-mill-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-us-il-chicago-mill-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-us-merc-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\jquery.vectormap\maps\jquery-jvectormap-world-mill-en.js" />
+    <None Include="wwwroot\vendor\admin-resources\rwd-table\rwd-table.min.js" />
+    <None Include="wwwroot\vendor\feather-icons\feather.min.js" />
+    <None Include="wwwroot\vendor\flatpickr\flatpickr.min.js" />
+    <None Include="wwwroot\vendor\node-waves\waves.min.js" />
+    <None Include="wwwroot\vendor\pace-js\pace.min.js" />
+    <None Include="wwwroot\vendor\pages\apexcharts.init.js" />
+    <None Include="wwwroot\vendor\pages\calendar.init.js" />
+    <None Include="wwwroot\vendor\pages\chartjs.init.js" />
+    <None Include="wwwroot\vendor\pages\coming-soon.init.js" />
+    <None Include="wwwroot\vendor\pages\dashboard.init.js" />
+    <None Include="wwwroot\vendor\pages\datatable-pages.init.js" />
+    <None Include="wwwroot\vendor\pages\datatables.init.js" />
+    <None Include="wwwroot\vendor\pages\echarts.init.js" />
+    <None Include="wwwroot\vendor\pages\email-editor.init.js" />
+    <None Include="wwwroot\vendor\pages\fontawesome.init.js" />
+    <None Include="wwwroot\vendor\pages\form-advanced.init.js" />
+    <None Include="wwwroot\vendor\pages\form-editor.init.js" />
+    <None Include="wwwroot\vendor\pages\form-mask.init.js" />
+    <None Include="wwwroot\vendor\pages\form-validation.init.js" />
+    <None Include="wwwroot\vendor\pages\form-wizard.init.js" />
+    <None Include="wwwroot\vendor\pages\gmaps.init.js" />
+    <None Include="wwwroot\vendor\pages\invoices-list.init.js" />
+    <None Include="wwwroot\vendor\pages\jquery-knob.init.js" />
+    <None Include="wwwroot\vendor\pages\leaflet-map.init.js" />
+    <None Include="wwwroot\vendor\pages\leaflet-us-states.js" />
+    <None Include="wwwroot\vendor\pages\lightbox.init.js" />
+    <None Include="wwwroot\vendor\pages\materialdesign.init.js" />
+    <None Include="wwwroot\vendor\pages\notification.init.js" />
+    <None Include="wwwroot\vendor\pages\pass-addon.init.js" />
+    <None Include="wwwroot\vendor\pages\rangeslider.init.js" />
+    <None Include="wwwroot\vendor\pages\rating.init.js" />
+    <None Include="wwwroot\vendor\pages\session-timeout.init.js" />
+    <None Include="wwwroot\vendor\pages\sparklines.init.js" />
+    <None Include="wwwroot\vendor\pages\sweetalert.init.js" />
+    <None Include="wwwroot\vendor\pages\table-editable.int.js" />
+    <None Include="wwwroot\vendor\pages\table-responsive.init.js" />
+    <None Include="wwwroot\vendor\pages\two-step-verification.init.js" />
+    <None Include="wwwroot\vendor\pages\validation.init.js" />
+    <None Include="wwwroot\vendor\pages\vector-maps.init.js" />
+    <None Include="wwwroot\vendor\simplebar\simplebar.min.js" />
+    <None Include="wwwroot\vendor\table\js\dataTables.bootstrap4.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="19.2.6" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="19.2.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="3.1.17" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GasStationRatingSystem.Common\GasStationRatingSystem.Common.csproj" />
+    <ProjectReference Include="..\GasStationRatingSystem.DAL\GasStationRatingSystem.DAL.csproj" />
+    <ProjectReference Include="..\GasStationRatingSystem.IOC\GasStationRatingSystem.IOC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Reports\VisitAnswerOptionXtraReport.cs">
+      <DependentUpon>VisitAnswerOptionXtraReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\VisitAnswerOptionXtraReport.Designer.cs">
+      <DependentUpon>VisitAnswerOptionXtraReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\VisitInfoXtraReport.cs">
+      <DependentUpon>VisitInfoXtraReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\VisitInfoXtraReport.Designer.cs">
+      <DependentUpon>VisitInfoXtraReport.repx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Guide\Views\MainInfluence\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Report\Views\ExportRatings\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\ExportedFiles\" />
+    <Folder Include="wwwroot\Uploads\VisitNotesImages\" />
+    <Folder Include="wwwroot\Uploads\VisitSigntures\" />
+    <Folder Include="wwwroot\Uploads\VisitQuestions\" />
+  </ItemGroup>
+
+</Project>
